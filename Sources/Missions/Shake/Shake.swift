@@ -10,7 +10,7 @@ import SwiftUI
 
 // MARK: - Mission properties
 
-public struct ShakeMissionProperties: Hashable, Codable {
+public struct ShakeMissionProperties: Codable, Hashable {
     public var type = MissionType.shake
     public var sensitivity = Double(0.5)
     public var numberOfShakes = 20
@@ -46,7 +46,7 @@ struct ShakeMissionPropertiesView: View {
                     }
                     .foregroundColor(.secondary)
                 }
-                .verticalPadding()
+                .dynamicVerticalPadding()
                 .dynamicHorizontalPadding()
                 .frame(maxWidth: .infinity)
             }

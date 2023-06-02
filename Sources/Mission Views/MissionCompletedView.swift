@@ -85,7 +85,7 @@ struct MissionPopupButton: View {
             Text(title)
                 .foregroundColor(tintColor)
                 .fontWeight(.semibold)
-                .verticalPadding()
+                .dynamicVerticalPadding()
                 .dynamicHorizontalPadding()
                 .frame(maxWidth: .infinity)
                 .background {

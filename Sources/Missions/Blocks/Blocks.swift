@@ -10,7 +10,7 @@ import SwiftUI
 
 // MARK: - Mission properties
 
-public struct BlocksMissionProperties: Hashable, Codable {
+public struct BlocksMissionProperties: Codable, Hashable {
     public var type = MissionType.blocks
     public var selectedPresetName: String?
 

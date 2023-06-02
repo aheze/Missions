@@ -13,7 +13,7 @@ public extension View {
         padding(.horizontal, 16)
     }
     
-    func verticalPadding() -> some View {
+    func dynamicVerticalPadding() -> some View {
         padding(.vertical, 14)
     }
 

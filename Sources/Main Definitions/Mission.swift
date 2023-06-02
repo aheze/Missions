@@ -53,8 +53,8 @@ public enum MissionType: Codable, CaseIterable {
     }
 }
 
-public struct Mission: Identifiable, Hashable {
-    public enum Content: Hashable {
+public struct Mission: Codable, Identifiable, Hashable {
+    public enum Content: Codable, Hashable {
         case shake(properties: ShakeMissionProperties = .init())
         case blocks(properties: BlocksMissionProperties = .init())
 //        case <#yourMissionName#>(properties: <#YourMissionName#>MissionProperties = .init())
