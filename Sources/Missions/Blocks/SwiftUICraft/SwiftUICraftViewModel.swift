@@ -51,7 +51,8 @@ class SwiftUICraftViewModel: ObservableObject {
     var tilt: CGFloat {
         let translation = savedTranslation + additionalTranslation
         let tilt = 0.3 - (translation / 100)
-        return max(0.00001, tilt)
+        return tilt
+//        return max(0.00001, tilt)
     }
 
     /// The length of each block.
@@ -65,6 +66,18 @@ class SwiftUICraftViewModel: ObservableObject {
 }
 
 extension SwiftUICraftViewModel {
+    func setBlocks(blocks: [Block], completion: (() -> Void)? = nil) {
+        var blocks = blocks
+        blocks = blocks.sorted { a, b in a.coordinate < b.coordinate } /// maintain order
+        let inverseBlocks = blocks.sorted { a, b in a.coordinate <~ b.coordinate } /// maintain order
+        
+        DispatchQueue.main.async {
+            self.level.world.blocks = blocks
+            self.level.world.inverseBlocks = inverseBlocks
+            completion?()
+        }
+    }
+    
     /// Add the current selected item at a coordinate.
     func addBlock(at coordinate: Coordinate) {
         switch selectedItem {
@@ -80,14 +93,18 @@ extension SwiftUICraftViewModel {
                 }
                 let block = Block(coordinate: coordinate, blockKind: associatedBlockKind)
                 blocks.append(block)
-                blocks = blocks.sorted { a, b in a.coordinate < b.coordinate } /// maintain order
                 
-                DispatchQueue.main.async {
-                    self.level.world.blocks = blocks
-                    
-                    
+                self.setBlocks(blocks: blocks) {
                     self.blocksUpdated?()
                 }
+                
+//                blocks = blocks.sorted { a, b in a.coordinate < b.coordinate } /// maintain order
+//
+//                DispatchQueue.main.async {
+//                    self.level.world.blocks = blocks
+//
+//                    self.blocksUpdated?()
+//                }
             }
         }
     }
@@ -101,14 +118,21 @@ extension SwiftUICraftViewModel {
         currentLiquidAnimationTask = nil
         
         var blocks = level.world.blocks
+        var inverseBlocks = level.world.inverseBlocks
+        
         DispatchQueue.global().async {
             /// Prevent duplicates.
             if let firstIndex = blocks.firstIndex(where: { $0.coordinate == coordinate }) {
                 blocks.remove(at: firstIndex)
             }
             
+            if let firstIndex = inverseBlocks.firstIndex(where: { $0.coordinate == coordinate }) {
+                inverseBlocks.remove(at: firstIndex)
+            }
+            
             DispatchQueue.main.async {
                 self.level.world.blocks = blocks
+                self.level.world.inverseBlocks = inverseBlocks
                 
                 self.blocksUpdated?()
             }

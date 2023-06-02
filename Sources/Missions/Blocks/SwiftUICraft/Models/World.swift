@@ -13,6 +13,7 @@ struct World: Equatable, Codable {
     var width: Int
     var height: Int
     var blocks: [Block]
+    var inverseBlocks = [Block]()
 
     func getContainingBlockKinds() -> [BlockKind] {
         let kinds = blocks.map { $0.blockKind }.uniqued()

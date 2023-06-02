@@ -99,6 +99,9 @@ struct BlocksMissionView: View {
                 items: items,
                 background: []
             )
+            
+            model.setBlocks(blocks: model.level.world.blocks)
+            overlayModel.setBlocks(blocks: overlayModel.level.world.blocks)
 
             model.initialYOffset = 100 + initialOffset * 0.2
             overlayModel.initialYOffset = initialOffset

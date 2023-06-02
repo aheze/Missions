@@ -88,7 +88,16 @@ struct GameView: View {
                 /// Enumerate over all blocks in the world and display them.
                 /// `model.level.world.blocks` must be sorted ascending for the 3D illusion to work.
                 ZStack(alignment: .topLeading) {
-                    ForEach(model.level.world.blocks, id: \.hashValue) { block in
+                    let blocks: [Block] = {
+                        
+                        if model.tilt > 0 {
+                            return model.level.world.blocks
+                        } else {
+                            return model.level.world.inverseBlocks
+                        }
+                    }()
+                    
+                    ForEach(blocks, id: \.hashValue) { block in
                         BlockView(
                             selectedItem: model.selectedItem,
                             tilt: model.tilt,
@@ -103,6 +112,7 @@ struct GameView: View {
                             )
                             model.addBlock(at: coordinate)
                         } leftTapped: {
+//                            let rowOffset = model.tilt > 0 ? 1 : -1
                             let coordinate = Coordinate(
                                 row: block.coordinate.row + 1,
                                 column: block.coordinate.column,
@@ -110,9 +120,10 @@ struct GameView: View {
                             )
                             model.addBlock(at: coordinate)
                         } rightTapped: {
+                            let columnOffset = model.tilt > 0 ? 1 : -1
                             let coordinate = Coordinate(
                                 row: block.coordinate.row,
-                                column: block.coordinate.column + 1,
+                                column: block.coordinate.column + columnOffset,
                                 levitation: block.coordinate.levitation
                             )
                             model.addBlock(at: coordinate)
