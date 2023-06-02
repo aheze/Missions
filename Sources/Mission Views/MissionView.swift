@@ -25,8 +25,8 @@ public struct MissionView: View {
 
     public var configuration: MissionViewConfiguration
     public var mission: Mission
+    @Binding public var soundOn: Bool
 
-    @State var soundOn = false
     @State var complete = false
     @State var showingPreviewExpiredAlert = false
     @State var timeElapsedWithoutUserInteraction = Double(0)
@@ -36,9 +36,10 @@ public struct MissionView: View {
         missionTimeLimit - timeElapsedWithoutUserInteraction < 10
     }
 
-    public init(configuration: MissionViewConfiguration, mission: Mission) {
+    public init(configuration: MissionViewConfiguration, mission: Mission, soundOn: Binding<Bool>) {
         self.configuration = configuration
         self.mission = mission
+        self._soundOn = soundOn
     }
 
     public var body: some View {
@@ -65,7 +66,6 @@ public struct MissionView: View {
                         backPressed?()
                     } label: {
                         Image(systemName: "chevron.backward")
-                            .font(.headline)
                             .fontWeight(.medium)
                             .contentShape(Rectangle())
                     }
@@ -76,8 +76,10 @@ public struct MissionView: View {
                         soundOn.toggle()
                     } label: {
                         Image(systemName: soundOn ? "speaker.fill" : "speaker.slash.fill")
+                            .contentShape(Rectangle())
                     }
                 }
+                .font(.title2)
                 .overlay {
                     Text(type.metadata.title)
                         .font(.headline)
@@ -85,7 +87,7 @@ public struct MissionView: View {
                 }
                 .foregroundColor(tintColor)
                 .dynamicHorizontalPadding()
-                .padding(.top, 10)
+                .padding(.top, 12)
                 .padding(.bottom, 6)
 
                 content
@@ -207,10 +209,11 @@ struct MissionsProgressView: View {
 
 struct MissionViewPreview: View {
     @State var mission: Mission = .init(content: .blocks())
+    @State var soundOn = false
 
     var body: some View {
         NavigationStack {
-            MissionView(configuration: .preview, mission: mission)
+            MissionView(configuration: .preview, mission: mission, soundOn: $soundOn)
         }
     }
 }

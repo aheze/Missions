@@ -159,7 +159,7 @@ struct MissionPropertiesViewPreview: View {
 //            ) { mission in
 //            }
             .navigationDestination(for: Mission.self) { mission in
-                MissionView(configuration: .preview, mission: mission)
+                MissionView(configuration: .preview, mission: mission, soundOn: .constant(false))
             }
         }
     }
