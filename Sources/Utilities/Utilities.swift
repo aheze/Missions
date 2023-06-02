@@ -8,12 +8,12 @@
 
 import SwiftUI
 
-extension View {
-    func horizontalEdgePadding() -> some View {
+public extension View {
+    func dynamicHorizontalPadding() -> some View {
         padding(.horizontal, 16)
     }
     
-    func verticalRowPadding() -> some View {
+    func verticalPadding() -> some View {
         padding(.vertical, 14)
     }
 

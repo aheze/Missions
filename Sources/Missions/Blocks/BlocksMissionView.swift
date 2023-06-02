@@ -49,7 +49,7 @@ struct BlocksMissionView: View {
                                         )
                                     }
                             }
-                            .horizontalEdgePadding()
+                            .dynamicHorizontalPadding()
                         }
                     }
                     .padding(.bottom, 20)

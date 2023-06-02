@@ -16,6 +16,20 @@ public struct MissionPropertiesView: View {
     var missionFinishedEditing: (Mission) -> Void
     @State var propertiesModified = false
 
+    public init(
+        editingMission: Mission,
+        type: MissionType,
+        isEditingExistingMission: Bool,
+        goToMissionPreview: @escaping (Mission) -> Void,
+        missionFinishedEditing: @escaping (Mission) -> Void
+    ) {
+        self._editingMission = State(initialValue: editingMission)
+        self.type = type
+        self.isEditingExistingMission = isEditingExistingMission
+        self.goToMissionPreview = goToMissionPreview
+        self.missionFinishedEditing = missionFinishedEditing
+    }
+
     public var body: some View {
         ScrollView {
             VStack(spacing: 16) {
@@ -31,7 +45,7 @@ public struct MissionPropertiesView: View {
                 .font(.title2)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .offset(y: -10)
-                .horizontalEdgePadding()
+                .dynamicHorizontalPadding()
 
                 switch editingMission.content {
                 case .shake(let properties):
@@ -82,14 +96,14 @@ public struct MissionPropertiesView: View {
             }
             .fontWeight(.semibold)
             .padding(.vertical, 20)
-            .horizontalEdgePadding()
+            .dynamicHorizontalPadding()
             .background {
                 Capsule(style: .continuous)
                     .fill(Color.accentColor)
                     .opacity(0.1)
             }
             .padding(.vertical, 10)
-            .horizontalEdgePadding()
+            .dynamicHorizontalPadding()
             .frame(maxWidth: .infinity)
             .background {
                 VariableBlurView(gradientMask: UIImage(named: "Gradient-Reversed")!)

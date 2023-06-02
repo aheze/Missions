@@ -10,9 +10,9 @@ import SwiftUI
 
 public struct Mission: Identifiable, Hashable {
     public var id = UUID().uuidString
-    var content: Content
+    public var content: Content
 
-    enum Content: Hashable {
+    public enum Content: Hashable {
         case shake(properties: ShakeMissionProperties = .init())
         case blocks(properties: BlocksMissionProperties = .init())
 

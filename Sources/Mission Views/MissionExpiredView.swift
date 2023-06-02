@@ -85,7 +85,7 @@ struct MissionExpiredView_Previews: PreviewProvider {
             .overlay {
                 MissionExpiredView {}
                     .frame(maxWidth: 300)
-                    .horizontalEdgePadding()
+                    .dynamicHorizontalPadding()
             }
             .background {
                 Color.orange

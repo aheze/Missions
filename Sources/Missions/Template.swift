@@ -52,7 +52,7 @@ import SwiftUI
 //    var body: some View {
 //        ScrollView {
 //            <#Name#>MissionPropertiesView(properties: $properties)
-//                .horizontalEdgePadding()
+//                .dynamicHorizontalPadding()
 //        }
 //        .background(Color(uiColor: .systemGroupedBackground))
 //    }

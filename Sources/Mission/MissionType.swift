@@ -8,19 +8,9 @@
 
 import SwiftUI
 
-enum MissionType: Identifiable, CaseIterable {
-    var id: Self {
-        self
-    }
-
+public enum MissionType: CaseIterable {
     case shake
     case blocks
-
-    struct Metadata {
-        var icon: String
-        var title: String
-        var description: String
-    }
 
     var defaultMissionContent: Mission.Content {
         switch self {
@@ -46,5 +36,17 @@ enum MissionType: Identifiable, CaseIterable {
                 description: "Craft with blocks"
             )
         }
+    }
+}
+
+extension MissionType: Identifiable {
+    public var id: Self {
+        self
+    }
+
+    struct Metadata {
+        var icon: String
+        var title: String
+        var description: String
     }
 }

@@ -84,7 +84,7 @@ public struct MissionView: View {
                         .fontWeight(.semibold)
                 }
                 .foregroundColor(tintColor)
-                .horizontalEdgePadding()
+                .dynamicHorizontalPadding()
                 .padding(.top, 10)
                 .padding(.bottom, 6)
 
@@ -100,7 +100,7 @@ public struct MissionView: View {
             if !complete, showProgressView {
                 MissionsProgressView(tintColor: tintColor, progress: progress)
                     .frame(height: 3)
-                    .horizontalEdgePadding()
+                    .dynamicHorizontalPadding()
             }
 
             VStack {
@@ -125,13 +125,13 @@ public struct MissionView: View {
                             presentationMode.wrappedValue.dismiss()
                         }
                         .frame(maxWidth: 300)
-                        .horizontalEdgePadding()
+                        .dynamicHorizontalPadding()
                     case .alarm(let hasAnotherMission, let pressed, _, _):
                         MissionCompletedView(actionTitle: hasAnotherMission ? "Next Mission" : "Dismiss Alarm") {
                             pressed?()
                         }
                         .frame(maxWidth: 300)
-                        .horizontalEdgePadding()
+                        .dynamicHorizontalPadding()
                     }
                 }
 
@@ -143,7 +143,7 @@ public struct MissionView: View {
                         }
                     }
                     .frame(maxWidth: 300)
-                    .horizontalEdgePadding()
+                    .dynamicHorizontalPadding()
                 }
             }
             .padding(.top, 20)

@@ -85,8 +85,8 @@ struct MissionPopupButton: View {
             Text(title)
                 .foregroundColor(tintColor)
                 .fontWeight(.semibold)
-                .verticalRowPadding()
-                .horizontalEdgePadding()
+                .verticalPadding()
+                .dynamicHorizontalPadding()
                 .frame(maxWidth: .infinity)
                 .background {
                     RoundedRectangle(cornerRadius: 16, style: .continuous)
@@ -121,7 +121,7 @@ struct MissionCompletedView_Previews: PreviewProvider {
             .overlay {
                 MissionCompletedView(actionTitle: "Dismiss Alarm") {}
                     .frame(maxWidth: 300)
-                    .horizontalEdgePadding()
+                    .dynamicHorizontalPadding()
             }
             .background {
                 Color.purple

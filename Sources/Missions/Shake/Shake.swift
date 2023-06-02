@@ -10,9 +10,14 @@ import SwiftUI
 
 // MARK: - Mission properties
 
-struct ShakeMissionProperties: Hashable, Codable {
+public struct ShakeMissionProperties: Hashable, Codable {
     var sensitivity = Double(0.5)
     var numberOfShakes = 20
+    
+    public init(sensitivity: Double = Double(0.5), numberOfShakes: Int = 20) {
+        self.sensitivity = sensitivity
+        self.numberOfShakes = numberOfShakes
+    }
 }
 
 // MARK: - Mission properties view
@@ -40,8 +45,8 @@ struct ShakeMissionPropertiesView: View {
                     }
                     .foregroundColor(.secondary)
                 }
-                .verticalRowPadding()
-                .horizontalEdgePadding()
+                .verticalPadding()
+                .dynamicHorizontalPadding()
                 .frame(maxWidth: .infinity)
             }
 
@@ -57,7 +62,7 @@ struct ShakeMissionPropertiesView: View {
                 .frame(maxWidth: .infinity)
             }
         }
-        .horizontalEdgePadding()
+        .dynamicHorizontalPadding()
     }
 }
 
@@ -108,7 +113,7 @@ struct ShakeMissionPropertiesViewPreview: View {
     var body: some View {
         ScrollView {
             ShakeMissionPropertiesView(properties: $properties)
-                .horizontalEdgePadding()
+                .dynamicHorizontalPadding()
         }
         .background(Color(uiColor: .systemGroupedBackground))
     }

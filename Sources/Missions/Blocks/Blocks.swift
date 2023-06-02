@@ -12,6 +12,10 @@ import SwiftUI
 
 public struct BlocksMissionProperties: Hashable, Codable {
     var selectedPresetName: String?
+    
+    public init(selectedPresetName: String? = nil) {
+        self.selectedPresetName = selectedPresetName
+    }
 }
 
 // MARK: - Mission properties view
@@ -30,7 +34,7 @@ struct BlocksMissionPropertiesView: View {
                     .foregroundColor(.secondary)
                     .font(.subheadline)
                     .textCase(.uppercase)
-                    .horizontalEdgePadding()
+                    .dynamicHorizontalPadding()
 
                 LazyVGrid(columns: columns, spacing: 16) {
                     BlocksMissionPresetView(properties: $properties, preset: nil)
@@ -39,7 +43,7 @@ struct BlocksMissionPropertiesView: View {
                         BlocksMissionPresetView(properties: $properties, preset: preset)
                     }
                 }
-                .horizontalEdgePadding()
+                .dynamicHorizontalPadding()
             }
         }
         .frame(maxWidth: .infinity)
@@ -105,7 +109,7 @@ struct BlocksMissionPropertiesViewPreview: View {
     var body: some View {
         ScrollView {
             BlocksMissionPropertiesView(properties: $properties)
-                .horizontalEdgePadding()
+                .dynamicHorizontalPadding()
         }
         .background(Color(uiColor: .systemGroupedBackground))
     }
