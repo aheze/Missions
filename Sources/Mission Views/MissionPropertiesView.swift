@@ -47,6 +47,7 @@ public struct MissionPropertiesView: View {
                 .offset(y: -10)
                 .dynamicHorizontalPadding()
 
+//                propertiesView()
                 Mission.propertiesView(mission: $editingMission)
 //                switch editingMission.content {
 //                case .shake(let properties):
@@ -119,6 +120,22 @@ public struct MissionPropertiesView: View {
         }
     }
 }
+
+//extension MissionPropertiesView {
+//    @ViewBuilder func propertiesView() -> some View {
+//        switch editingMission.content {
+//        case .shake(let properties):
+//            let binding = Mission.propertiesBinding(getContent: { .shake(properties: $0) }, mission: $editingMission, properties: properties)
+//            ShakeMissionPropertiesView(properties: binding)
+//        case .blocks(let properties):
+//            let binding = Mission.propertiesBinding(getContent: { .blocks(properties: $0) }, mission: $editingMission, properties: properties)
+//            BlocksMissionPropertiesView(properties: binding)
+////        case .<#yourMissionName#>(let properties):
+////            let binding = Mission.propertiesBinding(getContent: { .<#yourMissionName#>(properties: $0) }, mission: mission, properties: properties)
+////            <#YourMissionName#>MissionPropertiesView(properties: binding)
+//        }
+//    }
+//}
 
 struct MissionPropertiesViewPreview: View {
     @State var initialMission = Mission(content: .shake())

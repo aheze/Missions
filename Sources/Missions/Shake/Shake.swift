@@ -10,11 +10,11 @@ import SwiftUI
 
 // MARK: - Mission properties
 
-public struct ShakeMissionProperties: MissionProperties, Hashable, Codable {
+public struct ShakeMissionProperties: Hashable, Codable {
     public var type = MissionType.shake
     public var sensitivity = Double(0.5)
     public var numberOfShakes = 20
-    
+
     public init(sensitivity: Double = Double(0.5), numberOfShakes: Int = 20) {
         self.sensitivity = sensitivity
         self.numberOfShakes = numberOfShakes

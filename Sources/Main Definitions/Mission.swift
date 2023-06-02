@@ -74,13 +74,27 @@ public struct Mission: Identifiable, Hashable {
     @ViewBuilder static func propertiesView(mission: Binding<Mission>) -> some View {
         switch mission.wrappedValue.content {
         case .shake(let properties):
-            let binding = Mission.propertiesBinding(getContent: { .shake(properties: $0) }, mission: mission, properties: properties)
+            let binding = Binding {
+                properties
+            } set: { newValue in
+                mission.updateContent(content: .shake(properties: newValue))
+            }
+
             ShakeMissionPropertiesView(properties: binding)
         case .blocks(let properties):
-            let binding = Mission.propertiesBinding(getContent: { .blocks(properties: $0) }, mission: mission, properties: properties)
+            let binding = Binding {
+                properties
+            } set: { newValue in
+                mission.updateContent(content: .blocks(properties: newValue))
+            }
+
             BlocksMissionPropertiesView(properties: binding)
 //        case .<#yourMissionName#>(let properties):
-//            let binding = Mission.propertiesBinding(getContent: { .<#yourMissionName#>(properties: $0) }, mission: mission, properties: properties)
+//            let binding = Binding {
+//                properties
+//            } set: { newValue in
+//                mission.updateContent(content: .<#yourMissionName#>(properties: newValue))
+//            }
 //            <#YourMissionName#>MissionPropertiesView(properties: binding)
         }
     }
@@ -122,22 +136,8 @@ extension MissionType: Identifiable {
     }
 }
 
-extension Mission {
-    static func propertiesBinding<Properties: MissionProperties>(
-        getContent: @escaping ((Properties) -> Mission.Content),
-        mission: Binding<Mission>,
-        properties: Properties
-    ) -> Binding<Properties> {
-        let binding: Binding<Properties> = Binding {
-            properties
-        } set: { newValue in
-            mission.wrappedValue = .init(id: mission.wrappedValue.id, content: getContent(properties))
-        }
-
-        return binding
+extension Binding where Value == Mission {
+    func updateContent(content: Mission.Content) {
+        wrappedValue = .init(id: wrappedValue.id, content: content)
     }
-}
-
-protocol MissionProperties {
-    var type: MissionType { get }
 }

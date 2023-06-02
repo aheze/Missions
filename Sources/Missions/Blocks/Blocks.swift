@@ -10,10 +10,10 @@ import SwiftUI
 
 // MARK: - Mission properties
 
-public struct BlocksMissionProperties: MissionProperties, Hashable, Codable {
+public struct BlocksMissionProperties: Hashable, Codable {
     public var type = MissionType.blocks
     public var selectedPresetName: String?
-    
+
     public init(selectedPresetName: String? = nil) {
         self.selectedPresetName = selectedPresetName
     }
