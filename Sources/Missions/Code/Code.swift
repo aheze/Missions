@@ -12,10 +12,10 @@ import SwiftUI
 // MARK: - Mission properties
 
 public struct CodeMissionProperties: Hashable, Codable {
-    public var sensitivity = Double(0.5)
+    public var codeString: String?
 
-    public init(sensitivity: Double = Double(0.5)) {
-        self.sensitivity = sensitivity
+    public init(codeString: String? = nil) {
+        self.codeString = codeString
     }
 }
 
@@ -24,96 +24,43 @@ public struct CodeMissionProperties: Hashable, Codable {
 struct CodeMissionPropertiesView: View {
     @Binding var properties: CodeMissionProperties
 
-    @State var presented = false
+    @State var presentingCodeScanner = false
+    @State var error: Error?
+
     var body: some View {
         VStack(spacing: 24) {
-            MissionPropertiesGroupView(header: "Set Up") {
+            MissionPropertiesGroupView(header: properties.codeString == nil ? "Set Up" : "Selected Code:") {
                 Button {
-                    presented = true
+                    presentingCodeScanner = true
                 } label: {
                     HStack {
-                        Text("Choose Code")
+                        Text(properties.codeString ?? "Choose Code")
+                            .foregroundColor(properties.codeString == nil ? Color.accentColor : .secondary)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .dynamicVerticalPadding()
-                     
+
                         Image(systemName: "camera.fill")
                     }
-                        .dynamicHorizontalPadding()
+                    .dynamicHorizontalPadding()
                 }
             }
             .dynamicHorizontalPadding()
         }
-        .sheet(isPresented: $presented) {
-            CodeScanner()
-        }
-    }
-}
+        .sheet(isPresented: $presentingCodeScanner) {
+            SetupCodeScanner { result in
 
-struct CodeScanner: View {
-    var body: some View {
-        NavigationStack {
-            Color.clear
-                .overlay(alignment: .top) {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("Scan a barcode or QR code.")
-                            .font(.headline)
-
-                        Text("Look for a cereal box or something.")
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .dynamicVerticalPadding()
-                    .dynamicHorizontalPadding()
-                    .background {
-                        Rectangle()
-                            .fill(.regularMaterial)
-                    }
+                switch result {
+                case .success(let result):
+                    print("r: \(result) -> \(result.string)")
+                    presentingCodeScanner = false
+                    properties.codeString = result.string
+                case .failure(let error):
+                    print("Error scanning code: \(error)")
+                    self.error = error
                 }
-                .overlay {
-                    RoundedRectangle(cornerRadius: 16, style: .continuous)
-                        .stroke(Color.white, lineWidth: 4)
-                        .shadow(
-                            color: Color.black.opacity(0.25),
-                            radius: 16,
-                            x: 0,
-                            y: 10
-                        )
-                        .frame(maxWidth: 300, maxHeight: 180)
-                        .dynamicHorizontalPadding()
-                        .dynamicHorizontalPadding()
-                }
-                .background {
-                    VStack {
-                        Divider()
-                        
-                        CodeScannerView(codeTypes: [.code128, .ean13, .upce, .code39]) { result in
-                            print("Result: \(result)")
-                        }
-                        .ignoresSafeArea()
-                    }
-                }
-                .navigationTitle("Scan Code")
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbarCloseButton()
-        }
-    }
-}
-
-// MARK: - Mission view
-
-struct CodeMissionView: View {
-    @Environment(\.debugMode) var debugMode
-    @Environment(\.missionCompletion) var missionCompletion
-    @Environment(\.missionUserInteractionOccurred) var missionUserInteractionOccurred
-
-    var properties: CodeMissionProperties
-
-    var body: some View {
-        VStack {
-            Text("Code")
-            if debugMode {
-                Button("Debug testing button") {}
             }
         }
+        .errorAlert(error: $error)
     }
 }
 
