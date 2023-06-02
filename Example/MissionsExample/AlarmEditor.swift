@@ -82,7 +82,7 @@ struct AlarmEditor: View {
                                 path: $path,
                                 mission: mission
                             )
-                            .overlay(align: .topTrailing, to: .center) {
+                            .dynamicOverlay(align: .topTrailing, to: .center) {
                                 Button {
                                     withAnimation(.spring(response: 0.3, dampingFraction: 1, blendDuration: 1)) {
                                         selectedMissions = selectedMissions.filter { $0.id != mission.id }

@@ -12,7 +12,7 @@ public enum MissionType: CaseIterable {
     case shake
     case blocks
 
-    var defaultMissionContent: Mission.Content {
+    public var defaultMissionContent: Mission.Content {
         switch self {
         case .shake:
             return .shake()
@@ -21,7 +21,7 @@ public enum MissionType: CaseIterable {
         }
     }
 
-    var metadata: Metadata {
+    public var metadata: Metadata {
         switch self {
         case .shake:
             return Metadata(
@@ -44,9 +44,9 @@ extension MissionType: Identifiable {
         self
     }
 
-    struct Metadata {
-        var icon: String
-        var title: String
-        var description: String
+    public struct Metadata {
+        public var icon: String
+        public var title: String
+        public var description: String
     }
 }

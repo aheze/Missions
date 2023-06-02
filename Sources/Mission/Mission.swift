@@ -12,6 +12,11 @@ public struct Mission: Identifiable, Hashable {
     public var id = UUID().uuidString
     public var content: Content
 
+    public init(id: String = UUID().uuidString, content: Content) {
+        self.id = id
+        self.content = content
+    }
+
     public enum Content: Hashable {
         case shake(properties: ShakeMissionProperties = .init())
         case blocks(properties: BlocksMissionProperties = .init())

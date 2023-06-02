@@ -34,9 +34,9 @@ func CGPointDistance(from: CGPoint, to: CGPoint) -> CGFloat {
 }
 
 /// from https://stackoverflow.com/a/68555127/14351818
-extension View {
+public extension View {
     @available(iOS 15.0, *)
-    func overlay<Target: View>(align originAlignment: Alignment, to targetAlignment: Alignment, @ViewBuilder of target: () -> Target) -> some View {
+    func dynamicOverlay<Target: View>(align originAlignment: Alignment, to targetAlignment: Alignment, @ViewBuilder of target: () -> Target) -> some View {
         let hGuide = HorizontalAlignment(Alignment.TwoSided.self)
         let vGuide = VerticalAlignment(Alignment.TwoSided.self)
         return alignmentGuide(hGuide) { $0[originAlignment.horizontal] }
