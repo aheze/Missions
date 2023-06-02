@@ -33,7 +33,7 @@ struct ShakeMissionPropertiesView: View {
 
                     HStack {
                         Text("Easy")
-                        
+
                         Spacer()
 
                         Text("Hard")

@@ -10,11 +10,9 @@ import SwiftUI
 
 // MARK: - Mission properties
 
-struct BlocksMissionProperties: Hashable, Codable {
+public struct BlocksMissionProperties: Hashable, Codable {
     var selectedPresetName: String?
 }
-
-struct BlocksMissionGame {}
 
 // MARK: - Mission properties view
 

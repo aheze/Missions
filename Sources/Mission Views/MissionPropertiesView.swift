@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct MissionPropertiesView: View {
+public struct MissionPropertiesView: View {
     @State var editingMission: Mission
     var type: MissionType
     var isEditingExistingMission: Bool
@@ -16,7 +16,7 @@ struct MissionPropertiesView: View {
     var missionFinishedEditing: (Mission) -> Void
     @State var propertiesModified = false
 
-    var body: some View {
+    public var body: some View {
         ScrollView {
             VStack(spacing: 16) {
                 VStack {

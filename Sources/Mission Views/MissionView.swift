@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-enum MissionViewConfiguration {
+public enum MissionViewConfiguration {
     case preview
 
     /// 1. if there's another mission after this one
@@ -18,13 +18,13 @@ enum MissionViewConfiguration {
     case alarm(hasAnotherMission: Bool, pressed: (() -> Void)?, backPressed: (() -> Void)?, missionExpired: (() -> Void)?)
 }
 
-struct MissionView: View {
+public struct MissionView: View {
     @Environment(\.tintColor) var tintColor
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.missionTimeLimit) var missionTimeLimit
 
-    var configuration: MissionViewConfiguration
-    var mission: Mission
+    public var configuration: MissionViewConfiguration
+    public var mission: Mission
 
     @State var soundOn = false
     @State var complete = false
@@ -35,10 +35,15 @@ struct MissionView: View {
     var showProgressView: Bool {
         missionTimeLimit - timeElapsedWithoutUserInteraction < 10
     }
+    
+    public init(configuration: MissionViewConfiguration, mission: Mission) {
+        self.configuration = configuration
+        self.mission = mission
+    }
 
-    var body: some View {
+    public var body: some View {
         let type = mission.content.type
-        
+
         switch configuration {
         case .preview:
             content

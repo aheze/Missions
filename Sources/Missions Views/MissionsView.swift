@@ -1,19 +1,21 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by A. Zheng (github.com/aheze) on 6/1/23.
 //  Copyright © 2023 A. Zheng. All rights reserved.
 //
-    
 
 import SwiftUI
 
-struct MissionsView: View {
-    @Binding var path: NavigationPath
-    @State var newMissionID = UUID().uuidString
+public struct MissionsView: View {
+    @Binding public var path: NavigationPath
 
-    var body: some View {
+    public init(path: Binding<NavigationPath>) {
+        self._path = path
+    }
+
+    public var body: some View {
         ScrollView {
             VStack {
                 MissionsGridView { type in
