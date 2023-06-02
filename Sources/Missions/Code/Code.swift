@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import CodeScanner
 
 // MARK: - Mission properties
 
@@ -23,9 +24,26 @@ public struct CodeMissionProperties: Hashable, Codable {
 struct CodeMissionPropertiesView: View {
     @Binding var properties: CodeMissionProperties
 
+    @State var presented = false
     var body: some View {
         VStack(spacing: 24) {
-            MissionPropertiesGroupView(header: "Add customization controls here") {}
+            MissionPropertiesGroupView(header: "Set Up") {
+                Button("presented") {
+                    presented = true
+                }
+            }
+            
+        }
+        .sheet(isPresented: $presented) {
+            CodeScanner()
+        }
+    }
+}
+
+struct CodeScanner: View {
+    var body: some View {
+        CodeScannerView(codeTypes: [.code128, .ean13, .upce, .code39]) { result in
+            print("Result: \(result)")
         }
     }
 }

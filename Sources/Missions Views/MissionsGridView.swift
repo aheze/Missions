@@ -45,14 +45,16 @@ struct MissionsGridCell: View {
         VStack(alignment: .leading, spacing: 24) {
             Image(systemName: metadata.icon)
                 .font(.title3)
-                .frame(maxWidth: .infinity, alignment: .trailing)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
 
             Text(metadata.title)
                 .font(.title2)
                 .minimumScaleFactor(0.8)
                 .foregroundColor(.secondary)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .fixedSize(horizontal: false, vertical: true)
+                .multilineTextAlignment(.leading)
         }
-        .frame(maxWidth: .infinity)
         .padding(.horizontal, 16)
         .padding(.vertical, 16)
         .background(Color(uiColor: .secondarySystemGroupedBackground))
