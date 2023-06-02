@@ -10,7 +10,7 @@
 		3C39F2812A2985FA00428ECF /* MissionsExampleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C39F2802A2985FA00428ECF /* MissionsExampleApp.swift */; };
 		3C39F2832A2985FA00428ECF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C39F2822A2985FA00428ECF /* ContentView.swift */; };
 		3C39F2852A2985FB00428ECF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3C39F2842A2985FB00428ECF /* Assets.xcassets */; };
-		3C39F2882A2985FB00428ECF /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3C39F2872A2985FB00428ECF /* Preview Assets.xcassets */; };
+		3C39F2902A29863100428ECF /* Missions in Frameworks */ = {isa = PBXBuildFile; productRef = 3C39F28F2A29863100428ECF /* Missions */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -18,7 +18,6 @@
 		3C39F2802A2985FA00428ECF /* MissionsExampleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissionsExampleApp.swift; sourceTree = "<group>"; };
 		3C39F2822A2985FA00428ECF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		3C39F2842A2985FB00428ECF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		3C39F2872A2985FB00428ECF /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -26,6 +25,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3C39F2902A29863100428ECF /* Missions in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -54,17 +54,8 @@
 				3C39F2802A2985FA00428ECF /* MissionsExampleApp.swift */,
 				3C39F2822A2985FA00428ECF /* ContentView.swift */,
 				3C39F2842A2985FB00428ECF /* Assets.xcassets */,
-				3C39F2862A2985FB00428ECF /* Preview Content */,
 			);
 			path = MissionsExample;
-			sourceTree = "<group>";
-		};
-		3C39F2862A2985FB00428ECF /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				3C39F2872A2985FB00428ECF /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -83,6 +74,9 @@
 			dependencies = (
 			);
 			name = MissionsExample;
+			packageProductDependencies = (
+				3C39F28F2A29863100428ECF /* Missions */,
+			);
 			productName = MissionsExample;
 			productReference = 3C39F27D2A2985FA00428ECF /* MissionsExample.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +105,9 @@
 				Base,
 			);
 			mainGroup = 3C39F2742A2985FA00428ECF;
+			packageReferences = (
+				3C39F28E2A29863100428ECF /* XCRemoteSwiftPackageReference "Missions" */,
+			);
 			productRefGroup = 3C39F27E2A2985FA00428ECF /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -125,7 +122,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3C39F2882A2985FB00428ECF /* Preview Assets.xcassets in Resources */,
 				3C39F2852A2985FB00428ECF /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -266,7 +262,6 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"MissionsExample/Preview Content\"";
 				DEVELOPMENT_TEAM = WV6XDLHK3W;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -295,7 +290,6 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"MissionsExample/Preview Content\"";
 				DEVELOPMENT_TEAM = WV6XDLHK3W;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -339,6 +333,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		3C39F28E2A29863100428ECF /* XCRemoteSwiftPackageReference "Missions" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/aheze/Missions";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.0.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		3C39F28F2A29863100428ECF /* Missions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3C39F28E2A29863100428ECF /* XCRemoteSwiftPackageReference "Missions" */;
+			productName = Missions;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 3C39F2752A2985FA00428ECF /* Project object */;
 }
