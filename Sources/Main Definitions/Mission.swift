@@ -59,7 +59,7 @@ public struct Mission: Identifiable, Hashable {
         case blocks(properties: BlocksMissionProperties = .init())
 //        case <#yourMissionName#>(properties: <#YourMissionName#>MissionProperties = .init())
 
-        var type: MissionType {
+        public var type: MissionType {
             switch self {
             case .shake:
                 return .shake

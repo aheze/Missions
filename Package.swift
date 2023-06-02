@@ -24,7 +24,10 @@ let package = Package(
         .target(
             name: "Missions",
             dependencies: ["Prism"],
-            path: "Sources"
+            path: "Sources",
+            resources: [
+                .process("WorldPresets.txt")
+            ]
         )
     ]
 )

@@ -53,7 +53,8 @@ extension WorldParser {
 
 extension WorldParser {
     static func getWorldPresetsString() -> String? {
-        let url = Bundle.main.url(forResource: "WorldPresets", withExtension: "txt")
+        
+        let url = Bundle.module.url(forResource: "WorldPresets", withExtension: "txt")
 
         guard let url else {
             print("Couldn't locate WorldPresets file.")

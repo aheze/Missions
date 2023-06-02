@@ -32,11 +32,11 @@ struct BlockView: View {
         Group {
             switch block.blockKind.texture {
             case let .differentSides(top, _):
-                Image(top)
+                Image(top, bundle: .module)
                     .interpolation(.none)
                     .resizable()
             case let .image(image):
-                Image(image)
+                Image(image, bundle: .module)
                     .interpolation(.none)
                     .resizable()
             case .laser:
@@ -49,12 +49,12 @@ struct BlockView: View {
         Group {
             switch block.blockKind.texture {
             case let .differentSides(_, sides):
-                Image(sides)
+                Image(sides, bundle: .module)
                     .interpolation(.none)
                     .resizable()
                     .brightness(-0.1)
             case let .image(image):
-                Image(image)
+                Image(image, bundle: .module)
                     .interpolation(.none)
                     .resizable()
                     .brightness(-0.1)
@@ -91,12 +91,12 @@ struct BlockView: View {
         Group {
             switch block.blockKind.texture {
             case let .differentSides(_, sides):
-                Image(sides)
+                Image(sides, bundle: .module)
                     .interpolation(.none)
                     .resizable()
                     .brightness(-0.2)
             case let .image(image):
-                Image(image)
+                Image(image, bundle: .module)
                     .interpolation(.none)
                     .resizable()
                     .brightness(-0.2)

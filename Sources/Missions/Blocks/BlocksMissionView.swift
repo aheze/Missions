@@ -148,7 +148,7 @@ struct BlocksMissionView: View {
         VStack {
             switch item.preview {
             case let .image(image):
-                Image(image)
+                Image(image, bundle: .module)
                     .interpolation(.none)
                     .resizable()
                     .padding(18)
