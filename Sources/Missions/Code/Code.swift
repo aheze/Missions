@@ -6,14 +6,14 @@
 //  Copyright © 2023 A. Zheng. All rights reserved.
 //
 
-import SwiftUI
 import CodeScanner
+import SwiftUI
 
 // MARK: - Mission properties
 
 public struct CodeMissionProperties: Hashable, Codable {
     public var sensitivity = Double(0.5)
-    
+
     public init(sensitivity: Double = Double(0.5)) {
         self.sensitivity = sensitivity
     }
@@ -28,11 +28,20 @@ struct CodeMissionPropertiesView: View {
     var body: some View {
         VStack(spacing: 24) {
             MissionPropertiesGroupView(header: "Set Up") {
-                Button("presented") {
+                Button {
                     presented = true
+                } label: {
+                    HStack {
+                        Text("Choose Code")
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .dynamicVerticalPadding()
+                     
+                        Image(systemName: "camera.fill")
+                    }
+                        .dynamicHorizontalPadding()
                 }
             }
-            
+            .dynamicHorizontalPadding()
         }
         .sheet(isPresented: $presented) {
             CodeScanner()
@@ -42,8 +51,49 @@ struct CodeMissionPropertiesView: View {
 
 struct CodeScanner: View {
     var body: some View {
-        CodeScannerView(codeTypes: [.code128, .ean13, .upce, .code39]) { result in
-            print("Result: \(result)")
+        NavigationStack {
+            Color.clear
+                .overlay(alignment: .top) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Scan a barcode or QR code.")
+                            .font(.headline)
+
+                        Text("Look for a cereal box or something.")
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .dynamicVerticalPadding()
+                    .dynamicHorizontalPadding()
+                    .background {
+                        Rectangle()
+                            .fill(.regularMaterial)
+                    }
+                }
+                .overlay {
+                    RoundedRectangle(cornerRadius: 16, style: .continuous)
+                        .stroke(Color.white, lineWidth: 4)
+                        .shadow(
+                            color: Color.black.opacity(0.25),
+                            radius: 16,
+                            x: 0,
+                            y: 10
+                        )
+                        .frame(maxWidth: 300, maxHeight: 180)
+                        .dynamicHorizontalPadding()
+                        .dynamicHorizontalPadding()
+                }
+                .background {
+                    VStack {
+                        Divider()
+                        
+                        CodeScannerView(codeTypes: [.code128, .ean13, .upce, .code39]) { result in
+                            print("Result: \(result)")
+                        }
+                        .ignoresSafeArea()
+                    }
+                }
+                .navigationTitle("Scan Code")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbarCloseButton()
         }
     }
 }
@@ -59,6 +109,7 @@ struct CodeMissionView: View {
 
     var body: some View {
         VStack {
+            Text("Code")
             if debugMode {
                 Button("Debug testing button") {}
             }
@@ -89,5 +140,49 @@ struct CodeMissionPropertiesViewPreviewProvider: PreviewProvider {
 struct CodeMissionView_Previews: PreviewProvider {
     static var previews: some View {
         CodeMissionView(properties: .init())
+    }
+}
+
+struct ToolbarCloseButtonModifier: ViewModifier {
+    @Environment(\.presentationMode) var presentationMode
+    var placement: ToolbarItemPlacement
+
+    func body(content: Self.Content) -> some View {
+        content
+            .toolbar {
+                ToolbarItem(placement: placement) {
+                    ToolbarCloseButton {
+                        withAnimation {
+                            presentationMode.wrappedValue.dismiss()
+                        }
+                    }
+                }
+            }
+    }
+}
+
+struct ToolbarCloseButton: View {
+    var action: (() -> Void)?
+    var body: some View {
+        Button {
+            action?()
+        } label: {
+            Circle()
+#if os(iOS)
+                .fill(Color(uiColor: .quaternarySystemFill))
+#endif
+                .frame(width: 32)
+                .overlay(
+                    Image(systemName: "xmark")
+                        .font(.system(size: 12, weight: .heavy, design: .rounded))
+                        .foregroundColor(.primary.opacity(0.5))
+                )
+        }
+    }
+}
+
+extension View {
+    func toolbarCloseButton(placement: ToolbarItemPlacement = .navigationBarTrailing) -> some View {
+        self.modifier(ToolbarCloseButtonModifier(placement: placement))
     }
 }
