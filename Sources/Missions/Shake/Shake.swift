@@ -15,7 +15,7 @@ import SwiftUI
 public struct ShakeMissionProperties: Codable, Hashable {
     public var type = MissionType.shake
     public var sensitivity = Double(0.5)
-    public var numberOfShakes = 20
+    public var numberOfShakes = 10
 
     public init(sensitivity: Double = Double(0.5), numberOfShakes: Int = 20) {
         self.sensitivity = sensitivity
@@ -122,7 +122,7 @@ struct ShakeMissionView: View {
 
                 let acceleration = data.acceleration
                 if abs(acceleration.x) > accelerationThreshold || abs(acceleration.y) > accelerationThreshold || abs(acceleration.z) > accelerationThreshold {
-                    let sensitivity = Double(properties.sensitivity * 5)
+                    let sensitivity = Double(properties.sensitivity * 3.9)
                     var x1 = Double(0)
                     var x2 = Double(0)
                     var y1 = Double(0)
