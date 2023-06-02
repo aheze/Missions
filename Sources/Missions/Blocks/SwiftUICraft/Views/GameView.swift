@@ -80,6 +80,12 @@ struct GameView: View {
                     }
             } left: {
                 Color.white.brightness(-0.1)
+                    .overlay {
+                        Circle()
+                            .fill(Color.black)
+                            .opacity(0.5)
+                            .frame(width: 5, height: 5) /// marker
+                    }
             } right: {
                 Color.white.brightness(-0.3)
             }

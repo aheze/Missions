@@ -67,6 +67,8 @@ public struct MissionView: View {
                     } label: {
                         Image(systemName: "chevron.backward")
                             .fontWeight(.medium)
+                            .padding(.trailing, 16)
+                            .padding(.vertical, 4)
                             .contentShape(Rectangle())
                     }
 
@@ -84,6 +86,8 @@ public struct MissionView: View {
                     Text(type.metadata.title)
                         .font(.headline)
                         .fontWeight(.semibold)
+                        .padding(.leading, 16)
+                        .padding(.vertical, 4)
                 }
                 .foregroundColor(tintColor)
                 .dynamicHorizontalPadding()
