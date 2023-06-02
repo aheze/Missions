@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "cyan_concrete_powder.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

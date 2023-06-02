@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "warped_nylium.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

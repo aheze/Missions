@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "oak_leaves.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

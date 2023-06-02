@@ -1,0 +1,192 @@
+Torch
+3x3
+
+x x x
+x glowstone x
+x x x
+
+x x x
+x log x
+x x x
+
+x x x
+x log x
+x x x
+
+x x x
+x log x
+x x x
+
+---
+
+Treasure
+3x3
+
+gold diamond gold
+diamond gold diamond
+gold diamond gold
+
+---
+
+Turf
+3x3
+
+grass grass grass
+grass x x
+grass x x
+
+dirt dirt dirt
+dirt x x
+dirt x x
+
+---
+
+Ice Frame
+4x4
+
+ice ice ice ice
+ice x x ice
+ice x x ice
+ice ice ice ice
+
+ice x x ice
+x x x x
+x x x x
+ice x x ice
+
+ice x x ice
+x x x x
+x x x x
+ice x x ice
+
+---
+
+Desert
+5x5
+
+x x x x x
+x x x cactus x
+x x x x x
+x x x x x
+x x x x x
+
+x x x x x
+x x x cactus x
+x x x x x
+x cactus x x x
+x x x x x
+
+sand sand sand sand sand
+sand sand sand sand sand
+sand sand sand sand sand
+sand sand sand sand sand
+sand sand sand sand sand
+
+---
+
+Stone and Leaf
+5x5
+
+x x x x x
+x leaf x leaf x
+x x x x x
+x leaf x leaf x
+x x x x x
+
+x x x x x
+x leaf x leaf x
+x x x x x
+x leaf x leaf x
+x x x x x
+
+concrete stone concrete stone concrete
+stone leaf x leaf stone
+concrete x x x concrete
+stone leaf x leaf stone
+concrete stone concrete stone concrete
+
+---
+
+Tree
+3x3
+
+x leaf x
+leaf leaf leaf
+x leaf x
+
+leaf leaf leaf
+leaf log leaf
+leaf leaf leaf
+
+x x x
+x log x
+x x x
+
+x x x
+x log x
+x x x
+
+x x x
+x log x
+x x x
+
+
+grass grass grass
+grass grass grass
+grass grass grass
+
+---
+
+Long Log
+3x3
+
+x x x
+x leaf x
+x x x
+
+x x x
+x log x
+x x x
+
+x x x
+x log x
+x x x
+
+x x x
+x log x
+log x log
+
+
+grass grass grass
+grass grass grass
+grass grass grass
+
+---
+
+Pyramid
+5x5
+
+x x x x x
+x x x x x
+x x laser x x
+x x x x x
+x x x x x
+
+x x x x x
+x x x x x
+x x diamond x x
+x x x x x
+x x x x x
+
+x x x x x
+x diamond diamond diamond x
+x diamond diamond diamond x
+x diamond diamond diamond x
+x x x x x
+
+diamond diamond diamond diamond diamond
+diamond diamond diamond diamond diamond
+diamond diamond diamond diamond diamond
+diamond diamond diamond diamond diamond
+diamond diamond diamond diamond diamond
+

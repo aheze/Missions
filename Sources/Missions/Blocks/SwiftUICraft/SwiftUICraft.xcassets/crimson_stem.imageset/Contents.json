@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "crimson_stem.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

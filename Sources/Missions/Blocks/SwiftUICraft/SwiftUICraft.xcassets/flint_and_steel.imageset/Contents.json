@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "flint_and_steel.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
