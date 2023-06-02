@@ -47,23 +47,24 @@ public struct MissionPropertiesView: View {
                 .offset(y: -10)
                 .dynamicHorizontalPadding()
 
-                switch editingMission.content {
-                case .shake(let properties):
-                    let binding: Binding<ShakeMissionProperties> = Binding {
-                        properties
-                    } set: { newValue in
-                        self.editingMission = .init(id: editingMission.id, content: .shake(properties: newValue))
-                    }
-                    ShakeMissionPropertiesView(properties: binding)
-                case .blocks(let properties):
-                    let binding: Binding<BlocksMissionProperties> = Binding {
-                        properties
-                    } set: { newValue in
-                        self.editingMission = .init(id: editingMission.id, content: .blocks(properties: newValue))
-                    }
-
-                    BlocksMissionPropertiesView(properties: binding)
-                }
+                Mission.propertiesView(mission: $editingMission)
+//                switch editingMission.content {
+//                case .shake(let properties):
+//                    let binding: Binding<ShakeMissionProperties> = Binding {
+//                        properties
+//                    } set: { newValue in
+//                        self.editingMission = .init(id: editingMission.id, content: .shake(properties: newValue))
+//                    }
+//                    ShakeMissionPropertiesView(properties: binding)
+//                case .blocks(let properties):
+//                    let binding: Binding<BlocksMissionProperties> = Binding {
+//                        properties
+//                    } set: { newValue in
+//                        self.editingMission = .init(id: editingMission.id, content: .blocks(properties: newValue))
+//                    }
+//
+//                    BlocksMissionPropertiesView(properties: binding)
+//                }
             }
             .padding(.top, 8)
             .padding(.bottom, 20)

@@ -35,7 +35,7 @@ public struct MissionView: View {
     var showProgressView: Bool {
         missionTimeLimit - timeElapsedWithoutUserInteraction < 10
     }
-    
+
     public init(configuration: MissionViewConfiguration, mission: Mission) {
         self.configuration = configuration
         self.mission = mission
@@ -103,17 +103,18 @@ public struct MissionView: View {
                     .dynamicHorizontalPadding()
             }
 
-            VStack {
-                switch mission.content {
-                case .shake(let properties):
-                    ShakeMissionView(properties: properties)
-                case .blocks(let properties):
-                    BlocksMissionView(properties: properties)
-                }
-            }
-            .environment(\.missionUserInteractionOccurred, resetAfterUserInteraction)
-            .environment(\.missionCompleted, complete)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+//            VStack {
+//                switch mission.content {
+//                case .shake(let properties):
+//                    ShakeMissionView(properties: properties)
+//                case .blocks(let properties):
+//                    BlocksMissionView(properties: properties)
+//                }
+//            }
+            mission.missionView()
+                .environment(\.missionUserInteractionOccurred, resetAfterUserInteraction)
+                .environment(\.missionCompleted, complete)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .padding(.top, 4)
         .overlay(alignment: .top) {
