@@ -89,7 +89,9 @@ struct ShakeMissionView: View {
                 .textCase(.uppercase)
                 .font(.callout)
 
-            Text("\(properties.numberOfShakes - shakesSoFar)")
+            let shakes = max(0, properties.numberOfShakes - shakesSoFar) /// prevent going under 0
+
+            Text("\(shakes)")
                 .font(.system(size: 120, weight: .medium, design: .rounded))
 
             if debugMode {
@@ -149,7 +151,7 @@ struct ShakeMissionView: View {
                                     incrementShake()
                                 }
                             } else {
-                                Throttler.throttle(delay: .seconds(0.5)) {
+                                Throttler.throttle(delay: .seconds(0.42)) {
                                     incrementShake()
                                 }
                             }
