@@ -63,7 +63,7 @@ struct AlarmEditor: View {
                 }
             }
             .navigationDestination(for: Mission.self) { mission in
-                MissionView(configuration: .preview, mission: mission)
+                MissionView(configuration: .preview, mission: mission, soundOn: .constant(false))
                     .toolbarRole(.editor)
             }
     }

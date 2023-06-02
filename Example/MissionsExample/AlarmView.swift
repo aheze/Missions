@@ -87,7 +87,8 @@ struct AlarmView: View {
                             }
                         }
                     ),
-                    mission: selectedMission
+                    mission: selectedMission,
+                    soundOn: .constant(false)
                 )
                 .id(selectedMission.id)
                 .environment(\.tintColor, .white)
