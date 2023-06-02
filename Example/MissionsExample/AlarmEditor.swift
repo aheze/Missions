@@ -75,7 +75,7 @@ struct AlarmEditor: View {
             
             if !selectedMissions.isEmpty {
                 ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 8) {
+                    HStack(spacing: 20) {
                         ForEach(selectedMissions) { mission in
                             AlarmEditorMissionView(
                                 selectedMissions: $selectedMissions,

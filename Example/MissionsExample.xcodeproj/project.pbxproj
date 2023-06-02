@@ -59,8 +59,8 @@
 			children = (
 				3C39F2802A2985FA00428ECF /* MissionsExampleApp.swift */,
 				3C39F2822A2985FA00428ECF /* ContentView.swift */,
-				3C39F2912A29866500428ECF /* AlarmView.swift */,
 				3C39F2932A29869800428ECF /* AlarmEditor.swift */,
+				3C39F2912A29866500428ECF /* AlarmView.swift */,
 				3C39F2842A2985FB00428ECF /* Assets.xcassets */,
 			);
 			path = MissionsExample;
