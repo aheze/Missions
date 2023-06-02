@@ -252,8 +252,8 @@ extension WorldParser {
 // case blackstone
 // case clay
 // case sand
-// case acaciaLog
-// case acaciaPlanks
+// case spruceLog
+// case sprucePlanks
 // case amethyst
 // case cactus
 //

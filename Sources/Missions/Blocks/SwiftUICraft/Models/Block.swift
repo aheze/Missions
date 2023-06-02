@@ -50,8 +50,8 @@ enum BlockKind: String, Codable, CaseIterable {
     case blackstone
     case clay
     case sand
-    case acaciaLog
-    case acaciaPlanks
+    case spruceLog
+    case sprucePlanks
     case amethyst
     case cactus
     
@@ -89,10 +89,10 @@ enum BlockKind: String, Codable, CaseIterable {
             return .image("clay")
         case .sand:
             return .image("sand")
-        case .acaciaLog:
-            return .differentSides(top: "acacia_log_top", sides: "acacia_log")
-        case .acaciaPlanks:
-            return .image("acacia_planks")
+        case .spruceLog:
+            return .differentSides(top: "spruce_log_top", sides: "spruce_log")
+        case .sprucePlanks:
+            return .image("spruce_planks")
         case .amethyst:
             return .image("amethyst_block")
         case .cactus:
@@ -142,10 +142,10 @@ enum BlockKind: String, Codable, CaseIterable {
             return .clay
         case .sand:
             return .sand
-        case .acaciaLog:
-            return .acaciaLog
-        case .acaciaPlanks:
-            return .acaciaPlanks
+        case .spruceLog:
+            return .spruceLog
+        case .sprucePlanks:
+            return .sprucePlanks
         case .amethyst:
             return .amethyst
         case .cactus:

@@ -21,8 +21,8 @@ enum Item: String, Codable, CaseIterable {
     case blackstone
     case clay
     case sand
-    case acaciaLog
-    case acaciaPlanks
+    case spruceLog
+    case sprucePlanks
     case amethyst
     case cactus
     
@@ -101,10 +101,10 @@ enum Item: String, Codable, CaseIterable {
             return .clay
         case .sand:
             return .sand
-        case .acaciaLog:
-            return .acaciaLog
-        case .acaciaPlanks:
-            return .acaciaPlanks
+        case .spruceLog:
+            return .spruceLog
+        case .sprucePlanks:
+            return .sprucePlanks
         case .amethyst:
             return .amethyst
         case .cactus:

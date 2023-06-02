@@ -225,13 +225,13 @@ extension Level {
                 (5, 4, 1), (5, 4, 2), (5, 4, 3),
             ] {
                 let coordinate = Coordinate(row: y, column: x, levitation: z)
-                let block = Block(coordinate: coordinate, blockKind: .acaciaLog)
+                let block = Block(coordinate: coordinate, blockKind: .spruceLog)
                 blocks.append(block)
             }
             
             _ = {
                 let coordinate = Coordinate(row: 4, column: 5, levitation: 4)
-                let block = Block(coordinate: coordinate, blockKind: .acaciaPlanks)
+                let block = Block(coordinate: coordinate, blockKind: .sprucePlanks)
                 blocks.append(block)
             }()
             
@@ -256,8 +256,8 @@ extension Level {
                 .blackstone,
                 .clay,
                 .sand,
-                .acaciaLog,
-                .acaciaPlanks,
+                .spruceLog,
+                .sprucePlanks,
                 .amethyst,
             ],
             background: [0x4CCCDA, 0xFFFFFF, 0xFFFFFF, 0x8BDAC4]
