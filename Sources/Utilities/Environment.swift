@@ -13,7 +13,7 @@ internal struct EdgePaddingKey: EnvironmentKey {
 }
 
 internal struct DebugModeKey: EnvironmentKey {
-    static let defaultValue = true
+    static let defaultValue = false
 }
 
 internal struct MissionCompletionKey: EnvironmentKey {
