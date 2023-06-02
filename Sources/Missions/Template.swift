@@ -10,13 +10,17 @@ import SwiftUI
 
 //// MARK: - Mission properties
 //
-//struct <#Name#>MissionProperties: Hashable, Codable {
-//    var sensitivity = Double(0.5)
+//public struct <#Name#>MissionProperties: Hashable, Codable {
+//    public var sensitivity = Double(0.5)
+//
+//    public init(sensitivity: Double = Double(0.5)) {
+//        self.sensitivity = sensitivity
+//    }
 //}
 //
 //// MARK: - Mission properties view
 //
-//struct <#Name#>MissionPropertiesView: View {
+// struct <#Name#>MissionPropertiesView: View {
 //    @Binding var properties: <#Name#>MissionProperties
 //
 //    var body: some View {
@@ -24,11 +28,11 @@ import SwiftUI
 //            MissionPropertiesGroupView(header: "Add customization controls here") {}
 //        }
 //    }
-//}
+// }
 //
 //// MARK: - Mission view
 //
-//struct <#Name#>MissionView: View {
+// struct <#Name#>MissionView: View {
 //    @Environment(\.debugMode) var debugMode
 //    @Environment(\.missionCompletion) var missionCompletion
 //    @Environment(\.missionUserInteractionOccurred) var missionUserInteractionOccurred
@@ -42,11 +46,11 @@ import SwiftUI
 //            }
 //        }
 //    }
-//}
+// }
 //
 //// MARK: - Previews
 //
-//struct <#Name#>MissionPropertiesViewPreview: View {
+// struct <#Name#>MissionPropertiesViewPreview: View {
 //    @State var properties = <#Name#>MissionProperties()
 //
 //    var body: some View {
@@ -56,16 +60,16 @@ import SwiftUI
 //        }
 //        .background(Color(uiColor: .systemGroupedBackground))
 //    }
-//}
+// }
 //
-//struct <#Name#>MissionPropertiesViewPreviewProvider: PreviewProvider {
+// struct <#Name#>MissionPropertiesViewPreviewProvider: PreviewProvider {
 //    static var previews: some View {
 //        <#Name#>MissionPropertiesViewPreview()
 //    }
-//}
+// }
 //
-//struct <#Name#>MissionView_Previews: PreviewProvider {
+// struct <#Name#>MissionView_Previews: PreviewProvider {
 //    static var previews: some View {
 //        <#Name#>MissionView(properties: .init())
 //    }
-//}
+// }

@@ -16,6 +16,7 @@ import SwiftUI
 public enum MissionType: Codable, CaseIterable {
     case shake
     case blocks
+    case code
 //    case <#yourMissionName#>
 
     public var defaultMissionContent: Mission.Content {
@@ -24,6 +25,8 @@ public enum MissionType: Codable, CaseIterable {
             return .shake()
         case .blocks:
             return .blocks()
+        case .code:
+            return .code()
 //        case .<#yourMissionName#>:
 //            return .<#yourMissionName#>()
         }
@@ -43,6 +46,12 @@ public enum MissionType: Codable, CaseIterable {
                 title: "Blocks",
                 description: "Craft with blocks"
             )
+        case .code:
+            return Metadata(
+                icon: "qrcode",
+                title: "Code Scan",
+                description: "Scan a QR code or barcode"
+            )
 //        case .<#yourMissionName#>:
 //            return Metadata(
 //                icon: "<#your.mission.icon#>",
@@ -57,6 +66,7 @@ public struct Mission: Codable, Identifiable, Hashable {
     public enum Content: Codable, Hashable {
         case shake(properties: ShakeMissionProperties = .init())
         case blocks(properties: BlocksMissionProperties = .init())
+        case code(properties: CodeMissionProperties = .init())
 //        case <#yourMissionName#>(properties: <#YourMissionName#>MissionProperties = .init())
 
         public var type: MissionType {
@@ -65,6 +75,8 @@ public struct Mission: Codable, Identifiable, Hashable {
                 return .shake
             case .blocks:
                 return .blocks
+            case .code:
+                return .code
 //            case .<#yourMissionName#>:
 //                return .<#yourMissionName#>
             }
@@ -89,6 +101,14 @@ public struct Mission: Codable, Identifiable, Hashable {
             }
 
             BlocksMissionPropertiesView(properties: binding)
+        case .code(let properties):
+            let binding = Binding {
+                properties
+            } set: { newValue in
+                mission.updateContent(content: .code(properties: newValue))
+            }
+
+            CodeMissionPropertiesView(properties: binding)
 //        case .<#yourMissionName#>(let properties):
 //            let binding = Binding {
 //                properties
@@ -105,6 +125,8 @@ public struct Mission: Codable, Identifiable, Hashable {
             ShakeMissionView(properties: properties)
         case .blocks(let properties):
             BlocksMissionView(properties: properties)
+        case .code(let properties):
+            CodeMissionView(properties: properties)
 //        case .<#yourMissionName#>(let properties):
 //            <#YourMissionName#>MissionView(properties: properties)
         }
