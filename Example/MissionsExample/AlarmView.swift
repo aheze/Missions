@@ -39,7 +39,15 @@ struct AlarmView: View {
     var missions: [Mission]
     var dismissAlarm: (() -> Void)?
     
+    @State var completedMissions = [Mission]()
+    var missionsToComplete: [Mission] {
+        missions.filter { mission in
+            !completedMissions.contains(where: { $0.id == mission.id })
+        }
+    }
+    
     @State var selectedMission: Mission?
+    
     @State var pressing = false
     
     var body: some View {
@@ -49,20 +57,31 @@ struct AlarmView: View {
     @ViewBuilder var content: some View {
         VStack {
             if let selectedMission {
+                let hasAnotherMission = missionsToComplete.count > 1
+                    
                 MissionView(
                     configuration: .alarm(
-                        hasAnotherMission: false,
+                        hasAnotherMission: hasAnotherMission,
                         pressed: {
                             withAnimation {
-                                self.selectedMission = nil
+                                completedMissions.append(selectedMission)
+                                
+                                print("missionsToComplete: \(missionsToComplete)")
+                                self.selectedMission = missionsToComplete.first
+                                
+                                if self.selectedMission == nil {
+                                    dismissAlarm?()
+                                }
                             }
                         },
                         backPressed: {
+                            print("Back")
                             withAnimation {
                                 self.selectedMission = nil
                             }
                         },
                         missionExpired: {
+                            print("Expired")
                             withAnimation {
                                 self.selectedMission = nil
                             }
@@ -70,6 +89,7 @@ struct AlarmView: View {
                     ),
                     mission: selectedMission
                 )
+                .id(selectedMission.id)
                 .environment(\.tintColor, .white)
             } else {
                 alarmContent

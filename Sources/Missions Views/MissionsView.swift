@@ -27,7 +27,7 @@ public struct MissionsView: View {
             .padding(.bottom, 20)
         }
         .background(Color(uiColor: .systemGroupedBackground))
-        .navigationTitle("Missions")
+        .navigationTitle("Add Mission")
         .navigationBarTitleDisplayMode(.inline)
     }
 }
