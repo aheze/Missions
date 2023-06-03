@@ -58,6 +58,7 @@ struct BlocksMissionPropertiesView: View {
     @Binding var properties: BlocksMissionProperties
 
     @StateObject var model = BlocksMissionPropertiesModel()
+    @State var confirmingDeleteAll = false
 
     let columns = [
         GridItem(.adaptive(minimum: 100, maximum: 200), spacing: 12, alignment: .top)
@@ -91,11 +92,18 @@ struct BlocksMissionPropertiesView: View {
 
             if !model.importedPresets.isEmpty {
                 VStack(alignment: .leading, spacing: 16) {
-                    Text("Imported Worlds")
-                        .foregroundColor(.secondary)
-                        .font(.subheadline)
-                        .textCase(.uppercase)
-                        .dynamicHorizontalPadding()
+                    HStack {
+                        Text("Imported Worlds")
+                            .textCase(.uppercase)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+
+                        Button("Delete All", role: .destructive) {
+                            confirmingDeleteAll = true
+                        }
+                    }
+                    .foregroundColor(.secondary)
+                    .font(.subheadline)
+                    .dynamicHorizontalPadding()
 
                     LazyVGrid(columns: columns, spacing: 16) {
                         ForEach(model.importedPresets) { preset in
@@ -142,6 +150,14 @@ struct BlocksMissionPropertiesView: View {
                 Text(errorString)
             }
         }
+        .alert("Delete all imported worlds?", isPresented: $confirmingDeleteAll) {
+            Button("Delete All", role: .destructive) {
+                model.importedWorlds = []
+            }
+
+        } message: {
+            Text("You can't undo this action.")
+        }
         .onAppear {
             model.importedWorlds = []
             let debugString = """
@@ -162,7 +178,6 @@ struct BlocksMissionPropertiesView: View {
             }
         }
         .onChange(of: model.importedWorlds) { newValue in
-            print("changed: \(newValue.count)")
             model.updatePresetsFromImportedWorlds(worlds: newValue)
         }
     }
@@ -199,19 +214,22 @@ struct BlocksMissionImportedPresetView: View {
             }
             .alert("Delete \(preset?.name ?? "World")?", isPresented: $confirmingDeletion) {
                 Button("Delete", role: .destructive) {
+                    let presetName = preset?.name ?? ""
+
                     var importedWorlds = self.importedWorlds
+
+                    /// trim out worlds that have the same name
                     importedWorlds = importedWorlds.filter { world in
                         let worldString = world.trimmingCharacters(in: .whitespacesAndNewlines)
                         let components = worldString.components(separatedBy: "\n")
 
                         if let title = components.first {
-                            return title != preset?.name
-                        }
+                            return title != presetName
+                        } else {}
 
                         return true
                     }
 
-                    print("new importedWorlds: \(importedWorlds.count) -> \(importedWorlds)")
                     self.importedWorlds = importedWorlds
                 }
 
