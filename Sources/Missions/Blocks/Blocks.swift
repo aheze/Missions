@@ -47,11 +47,59 @@ class BlocksMissionPropertiesModel: ObservableObject {
             return
         }
 
-        downloadWithCode(code: code) { string in
+        downloadWithCode(code: code) { [weak self] string in
+            guard let self else { return }
+            
+            DispatchQueue.main.async {
+                if let string {
+                    if self.importedWorlds.contains(where: { $0.getImportedWorldName() == string.getImportedWorldName() }) {
+                        print("Already contains.")
+                        return
+                    }
+                    
+                    self.importedWorlds.append(string)
+                }
+            }
         }
     }
 
-    func downloadWithCode(code: String, completion: @escaping ((String?) -> Void)) {}
+    func downloadWithCode(code: String, completion: @escaping ((String?) -> Void)) {
+//    https://midnight-builds-api.vercel.app/api/
+
+        let baseURL = URL(string: "https://midnight-builds-api.vercel.app/api")!
+        let finalURL = baseURL.appending(path: code)
+
+        print("finalURL: \(finalURL)")
+
+        let task = URLSession.shared.dataTask(with: finalURL) { data, response, _ in
+            if let httpResponse = response as? HTTPURLResponse {
+                print(httpResponse.statusCode)
+
+                switch httpResponse.statusCode {
+                case 200:
+                    break
+                case 404:
+                    print("Code not found")
+                    return
+                default:
+                    return
+                }
+            }
+
+            if let data {
+                print("got data!")
+
+                if let string = String(data: data, encoding: .utf8) {
+                    completion(string)
+                    return
+                }
+            }
+
+            completion(nil)
+        }
+
+        task.resume()
+    }
 }
 
 struct BlocksMissionPropertiesView: View {
@@ -226,12 +274,10 @@ struct BlocksMissionImportedPresetView: View {
 
                     /// trim out worlds that have the same name
                     importedWorlds = importedWorlds.filter { world in
-                        let worldString = world.trimmingCharacters(in: .whitespacesAndNewlines)
-                        let components = worldString.components(separatedBy: "\n")
 
-                        if let title = components.first {
-                            return title != presetName
-                        } else {}
+                        if let worldName = world.getImportedWorldName() {
+                            return worldName != presetName
+                        }
 
                         return true
                     }
@@ -312,5 +358,18 @@ struct BlocksMissionPropertiesViewPreview: View {
 struct BlocksMissionPropertiesViewPreviewProvider: PreviewProvider {
     static var previews: some View {
         BlocksMissionPropertiesViewPreview()
+    }
+}
+
+extension String {
+    func getImportedWorldName() -> String? {
+        let worldString = trimmingCharacters(in: .whitespacesAndNewlines)
+        let components = worldString.components(separatedBy: "\n")
+
+        if let title = components.first {
+            return title
+        }
+
+        return nil
     }
 }
