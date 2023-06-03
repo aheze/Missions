@@ -184,6 +184,7 @@ struct BlocksMissionOverlayView: View {
                             }
                     }
             }
+            .menuOrder(.fixed)
         }
     }
 

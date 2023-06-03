@@ -95,56 +95,65 @@ struct GameView: View {
                 /// `model.level.world.blocks` must be sorted ascending for the 3D illusion to work.
                 ZStack(alignment: .topLeading) {
                     let blocks: [Block] = {
-                        
                         if model.tilt > 0 {
                             return model.level.world.blocks
                         } else {
                             return model.level.world.inverseBlocks
                         }
                     }()
-                    
+
                     ForEach(blocks, id: \.hashValue) { block in
-                        BlockView(
-                            selectedItem: model.selectedItem,
-                            tilt: model.tilt,
-                            length: model.blockLength,
-                            levitation: CGFloat(block.coordinate.levitation) * model.blockLength,
-                            block: block
-                        ) /** topTapped */ {
-                            let coordinate = Coordinate(
-                                row: block.coordinate.row,
-                                column: block.coordinate.column,
-                                levitation: block.coordinate.levitation + 1
-                            )
-                            model.addBlock(at: coordinate)
-                        } leftTapped: {
-//                            let rowOffset = model.tilt > 0 ? 1 : -1
-                            let coordinate = Coordinate(
-                                row: block.coordinate.row + 1,
-                                column: block.coordinate.column,
-                                levitation: block.coordinate.levitation
-                            )
-                            model.addBlock(at: coordinate)
-                        } rightTapped: {
-                            let columnOffset = model.tilt > 0 ? 1 : -1
-                            let coordinate = Coordinate(
-                                row: block.coordinate.row,
-                                column: block.coordinate.column + columnOffset,
-                                levitation: block.coordinate.levitation
-                            )
-                            model.addBlock(at: coordinate)
-                        } held: {
-                            model.removeBlock(at: block.coordinate)
+                        if let maxLevitationShown = model.maxLevitationShown {
+                            if block.coordinate.levitation <= maxLevitationShown {
+                                blockView(block: block)
+                            }
+                        } else {
+                            blockView(block: block)
                         }
-                        .offset( /// Position the block.
-                            x: CGFloat(block.coordinate.column) * model.blockLength,
-                            y: CGFloat(block.coordinate.row) * model.blockLength
-                        )
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             }
         }
         .scaleEffect(y: 0.69) /// Make everything a bit squished for a perspective illusion.
+    }
+
+    func blockView(block: Block) -> some View {
+        BlockView(
+            selectedItem: model.selectedItem,
+            tilt: model.tilt,
+            length: model.blockLength,
+            levitation: CGFloat(block.coordinate.levitation) * model.blockLength,
+            block: block
+        ) /** topTapped */ {
+            let coordinate = Coordinate(
+                row: block.coordinate.row,
+                column: block.coordinate.column,
+                levitation: block.coordinate.levitation + 1
+            )
+            model.addBlock(at: coordinate)
+        } leftTapped: {
+//                            let rowOffset = model.tilt > 0 ? 1 : -1
+            let coordinate = Coordinate(
+                row: block.coordinate.row + 1,
+                column: block.coordinate.column,
+                levitation: block.coordinate.levitation
+            )
+            model.addBlock(at: coordinate)
+        } rightTapped: {
+            let columnOffset = model.tilt > 0 ? 1 : -1
+            let coordinate = Coordinate(
+                row: block.coordinate.row,
+                column: block.coordinate.column + columnOffset,
+                levitation: block.coordinate.levitation
+            )
+            model.addBlock(at: coordinate)
+        } held: {
+            model.removeBlock(at: block.coordinate)
+        }
+        .offset( /// Position the block.
+            x: CGFloat(block.coordinate.column) * model.blockLength,
+            y: CGFloat(block.coordinate.row) * model.blockLength
+        )
     }
 }
