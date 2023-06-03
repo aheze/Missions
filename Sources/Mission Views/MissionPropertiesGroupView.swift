@@ -12,6 +12,7 @@ struct MissionPropertiesGroupView<Content: View>: View {
     @Environment(\.edgePadding) var edgePadding
 
     var header: String
+    var footer: String? = nil
     @ViewBuilder var content: Content
 
     var body: some View {
@@ -23,6 +24,12 @@ struct MissionPropertiesGroupView<Content: View>: View {
 
             content
                 .groupedBackground()
+            
+            if let footer {
+                Text(footer)
+                    .foregroundColor(.secondary)
+                    .font(.callout)
+            }
         }
     }
 }

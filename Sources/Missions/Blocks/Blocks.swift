@@ -22,6 +22,8 @@ public struct BlocksMissionProperties: Codable, Hashable {
 
 struct BlocksMissionPropertiesView: View {
     @Binding var properties: BlocksMissionProperties
+    
+    @State var code = ""
 
     let columns = [
         GridItem(.adaptive(minimum: 100, maximum: 200), spacing: 12, alignment: .top)
@@ -29,6 +31,30 @@ struct BlocksMissionPropertiesView: View {
 
     var body: some View {
         VStack(spacing: 24) {
+            
+            let binding = Binding {
+                code
+            } set: { newValue in
+                let allowedCharacters = CharacterSet(charactersIn: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789")
+                let characterSet = CharacterSet(charactersIn: newValue)
+                
+                guard newValue.count <= 6 else { return }
+                if allowedCharacters.isSuperset(of: characterSet) {
+                    code = newValue.uppercased()
+                }
+            }
+            
+            MissionPropertiesGroupView(header: "Import from Code", footer: "6-digit alphanumeric code") {
+                TextField("Enter Code", text: binding)
+                    .onSubmit {
+                        print("code: \(code)")
+                    }
+                    .textFieldStyle(.plain)
+                    .dynamicVerticalPadding()
+                    .dynamicHorizontalPadding()
+            }
+            .dynamicHorizontalPadding()
+            
             VStack(alignment: .leading, spacing: 8) {
                 Text("Selected World")
                     .foregroundColor(.secondary)
@@ -44,7 +70,12 @@ struct BlocksMissionPropertiesView: View {
                     }
                 }
                 .dynamicHorizontalPadding()
+                
+                
             }
+            
+        
+            
         }
         .frame(maxWidth: .infinity)
     }
@@ -109,7 +140,6 @@ struct BlocksMissionPropertiesViewPreview: View {
     var body: some View {
         ScrollView {
             BlocksMissionPropertiesView(properties: $properties)
-                .dynamicHorizontalPadding()
         }
         .background(Color(uiColor: .systemGroupedBackground))
     }
