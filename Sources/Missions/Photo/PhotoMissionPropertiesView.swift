@@ -13,6 +13,7 @@ import SwiftUI
 struct PhotoMissionPropertiesView: View {
     @Binding var properties: PhotoMissionProperties
     @State var presentingCamera = false
+    @State var loadingImage = false
 
     var body: some View {
         VStack(spacing: 24) {
@@ -20,8 +21,13 @@ struct PhotoMissionPropertiesView: View {
                 presentingCamera = true
             } label: {
                 VStack(spacing: 24) {
-                    if let imageData = properties.imageData {
-                        if let image = UIImage(data: imageData) {
+                    if loadingImage {
+                        ProgressView()
+                    } else {
+                        if
+                            let imageData = properties.imageData,
+                            let image = UIImage(data: imageData)
+                        {
                             Image(uiImage: image)
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
@@ -29,14 +35,12 @@ struct PhotoMissionPropertiesView: View {
                                 .mask {
                                     RoundedRectangle(cornerRadius: 10, style: .continuous)
                                 }
-                        } else {
-                            Text("Photo import failed :(")
-                        }
 
-                    } else {
-                        Image(systemName: "camera.shutter.button.fill")
-                            .font(.title2)
-                            .fontWeight(.bold)
+                        } else {
+                            Image(systemName: "camera.shutter.button.fill")
+                                .font(.title2)
+                                .fontWeight(.bold)
+                        }
                     }
 
                     Text(properties.imageData == nil ? "Tap to take a photo" : "Change photo")

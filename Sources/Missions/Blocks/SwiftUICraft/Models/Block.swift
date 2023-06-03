@@ -63,9 +63,9 @@ enum BlockKind: String, Codable, CaseIterable {
     case netherBricks
     case netherrack
     case gold
-    case laser
-    
     case diamond
+    
+    case laser
     
     var texture: Texture {
         switch self {
@@ -173,3 +173,5 @@ enum BlockKind: String, Codable, CaseIterable {
         }
     }
 }
+
+

@@ -19,6 +19,8 @@ struct PhotoMissionView: View {
     @State var presentingCamera = false
     @State var image: UIImage?
 
+    @State var processingImage = false
+    
     var body: some View {
         VStack(spacing: 20) {
             Text("Take a photo of this!")
@@ -55,7 +57,7 @@ struct PhotoMissionView: View {
         }
         .sheet(isPresented: $presentingCamera) {
             ImagePickerView(sourceType: .camera) { image in
-//                processImage(image: image)
+                processImage(image: image)
             }
             .ignoresSafeArea()
             .presentationDetents([.medium, .large])

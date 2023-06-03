@@ -13,9 +13,13 @@ extension PhotoMissionPropertiesView {
     func processImage(image: UIImage) {
         guard let cgImage = image.cgImage else { return }
         
+        withAnimation {
+            loadingImage = true
+        }
+        
         DispatchQueue.global(qos: .userInitiated).async {
             let data = image.jpegData(compressionQuality: 0.2)
-            let observation = featurePrintObservationForImage(cgImage: cgImage)
+            let observation = PhotoMissionProperties.featurePrintObservationForImage(cgImage: cgImage)
             
             DispatchQueue.main.async {
                 var properties = self.properties
@@ -33,11 +37,37 @@ extension PhotoMissionPropertiesView {
                 }
                 
                 self.properties = properties
+                
+                withAnimation {
+                    loadingImage = false
+                }
             }
         }
     }
-    
-    func featurePrintObservationForImage(cgImage: CGImage) -> VNFeaturePrintObservation? {
+}
+
+extension PhotoMissionView {
+    func processImage(image: UIImage) {
+        guard let cgImage = image.cgImage else { return }
+        
+        withAnimation {
+            processingImage = true
+        }
+        
+        DispatchQueue.global(qos: .userInitiated).async {
+            let observation = PhotoMissionProperties.featurePrintObservationForImage(cgImage: cgImage)
+            
+            DispatchQueue.main.async {
+                withAnimation {
+                    processingImage = false
+                }
+            }
+        }
+    }
+}
+
+extension PhotoMissionProperties {
+    static func featurePrintObservationForImage(cgImage: CGImage) -> VNFeaturePrintObservation? {
         let requestHandler = VNImageRequestHandler(cgImage: cgImage, options: [:])
         let request = VNGenerateImageFeaturePrintRequest()
         do {
