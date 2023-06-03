@@ -138,7 +138,7 @@ struct ShakeMissionView: View {
 
                         let change: Double = abs(x1 - x2 + y1 - y2 + z1 - z2)
                         if sensitivity < change {
-                            print("total=\(totalAccelerationInXY) x=\(acceleration.x) y=\(acceleration.y) z=\(acceleration.z). Sens: \(properties.sensitivity) vs \(change)")
+//                            print("total=\(totalAccelerationInXY) x=\(acceleration.x) y=\(acceleration.y) z=\(acceleration.z). Sens: \(properties.sensitivity) vs \(change)")
 
                             x2 = x1
                             y2 = y1
