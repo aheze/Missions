@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/aheze/Prism",
       "state" : {
-        "revision" : "ce6a394402af7907943114d419b517a4d3e997af",
-        "version" : "1.0.0"
+        "branch" : "main",
+        "revision" : "8f74e5b1b8b23c0c0c5bc963e4738c3be89af776"
       }
     }
   ],

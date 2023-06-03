@@ -16,7 +16,7 @@ let package = Package(
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
-         .package(url: "https://github.com/aheze/Prism", from: "1.0.0"),
+         .package(url: "https://github.com/aheze/Prism", branch: "main"),
          .package(path: "/Users/aheze/Desktop/Code/MidnightApp/Resources/CodeScanner")
     ],
     targets: [

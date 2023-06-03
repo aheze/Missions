@@ -13,7 +13,7 @@ struct MissionsGridView: View {
     var pressedType: (MissionType) -> Void
 
     let columns = [
-        GridItem(.adaptive(minimum: 100, maximum: 200), spacing: 8)
+        GridItem(.adaptive(minimum: 160, maximum: 280), spacing: 8)
     ]
 
     var body: some View {

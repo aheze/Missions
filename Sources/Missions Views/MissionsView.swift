@@ -26,6 +26,18 @@ public struct MissionsView: View {
             .padding(.top, 8)
             .padding(.bottom, 20)
         }
+        .safeAreaInset(edge: .bottom) {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Don't see your favorite mission? [Request it!](https://github.com/aheze/Missions/issues/new/choose)")
+                    .font(.headline)
+
+                Text("All missions are free and open source on [GitHub](https://github.com/aheze/Missions).")
+                    .foregroundColor(.secondary)
+            }
+            .dynamicVerticalPadding()
+            .dynamicHorizontalPadding()
+            .background(.regularMaterial)
+        }
         .background(Color(uiColor: .systemGroupedBackground))
         .navigationTitle("Add Mission")
         .navigationBarTitleDisplayMode(.inline)
