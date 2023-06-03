@@ -22,8 +22,13 @@ public struct BlocksMissionProperties: Codable, Hashable {
 
 struct BlocksMissionPropertiesView: View {
     @Binding var properties: BlocksMissionProperties
-    
+
     @State var code = ""
+    @State var errorString: String?
+
+    @AppStorage("importedWorlds") @Storage var importedWorlds = [String]()
+
+    let allowedCharacters = CharacterSet(charactersIn: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789")
 
     let columns = [
         GridItem(.adaptive(minimum: 100, maximum: 200), spacing: 12, alignment: .top)
@@ -31,30 +36,30 @@ struct BlocksMissionPropertiesView: View {
 
     var body: some View {
         VStack(spacing: 24) {
-            
             let binding = Binding {
                 code
             } set: { newValue in
-                let allowedCharacters = CharacterSet(charactersIn: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789")
-                let characterSet = CharacterSet(charactersIn: newValue)
-                
                 guard newValue.count <= 6 else { return }
+
+                let characterSet = CharacterSet(charactersIn: newValue)
                 if allowedCharacters.isSuperset(of: characterSet) {
                     code = newValue.uppercased()
                 }
             }
-            
+
             MissionPropertiesGroupView(header: "Import from Code", footer: "6-digit alphanumeric code") {
                 TextField("Enter Code", text: binding)
                     .onSubmit {
                         print("code: \(code)")
+
+                        importFromCode(code: code)
                     }
                     .textFieldStyle(.plain)
                     .dynamicVerticalPadding()
                     .dynamicHorizontalPadding()
             }
             .dynamicHorizontalPadding()
-            
+
             VStack(alignment: .leading, spacing: 8) {
                 Text("Selected World")
                     .foregroundColor(.secondary)
@@ -70,14 +75,42 @@ struct BlocksMissionPropertiesView: View {
                     }
                 }
                 .dynamicHorizontalPadding()
-                
-                
             }
-            
-        
-            
         }
         .frame(maxWidth: .infinity)
+        .alert("Error Importing", isPresented: Binding {
+            errorString != nil
+        } set: { _ in
+            errorString = nil
+        }) {
+            Button("Ok") {}
+        } message: {
+            if let errorString {
+                Text(errorString)
+            }
+        }
+    }
+
+    func importFromCode(code: String) {
+        if code.count != 6 {
+            errorString = "Code must be 6 digits."
+            return
+        }
+
+        let characterSet = CharacterSet(charactersIn: code)
+        if !allowedCharacters.isSuperset(of: characterSet) {
+            errorString = "Code must be alphanumeric (0-9, A-Z)."
+            return
+        }
+        
+        
+        downloadWithCode(code: code) { string in
+            
+        }
+    }
+    
+    func downloadWithCode(code: String, completion: @escaping ((String?) -> Void)) {
+        
     }
 }
 
