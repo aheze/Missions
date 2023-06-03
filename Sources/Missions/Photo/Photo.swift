@@ -12,111 +12,17 @@ import SwiftUI
 
 public struct PhotoMissionProperties: Hashable, Codable {
     public var sensitivity = Double(0.5)
-    public var imageData: Data?
+    public var imageData: Data? {
+        didSet {
+            print("Set image data! \(imageData)")
+        }
+    }
     public var featurePrintData: Data?
 
     public init(sensitivity: Double = Double(0.5), imageData: Data? = nil, featurePrintData: Data? = nil) {
         self.sensitivity = sensitivity
         self.imageData = imageData
         self.featurePrintData = featurePrintData
-    }
-}
-
-// MARK: - Mission properties view
-
-struct PhotoMissionPropertiesView: View {
-    @Binding var properties: PhotoMissionProperties
-    @State var presentingCamera = false
-
-    var body: some View {
-        VStack(spacing: 24) {
-            Button {
-                presentingCamera = true
-            } label: {
-                VStack(spacing: 24) {
-                    Image(systemName: "camera.shutter.button.fill")
-                        .font(.title2)
-                        .fontWeight(.bold)
-
-                    Text("Tap to take a photo")
-                        .font(.title3)
-                }
-                .foregroundColor(.accentColor)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 32)
-                .padding(.vertical, 48)
-                .frame(maxWidth: .infinity)
-                .background {
-                    RoundedRectangle(cornerRadius: 16, style: .continuous)
-                        .fill(.thinMaterial)
-                }
-                .overlay {
-                    RoundedRectangle(cornerRadius: 16, style: .continuous)
-                        .strokeBorder(Color.primary, style: .init(lineWidth: 0.25, lineCap: .round, dash: [5], dashPhase: 2))
-                        .opacity(0.5)
-                }
-            }
-            .buttonStyle(.plain)
-
-            VStack(spacing: 12) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Snap your first activity of the day.")
-                        .font(.headline)
-
-                    Text("Examples:")
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-
-                HStack(spacing: 8) {
-                    imageCell(title: "Sink", imageName: "sink")
-                    imageCell(title: "Yoga Ball", imageName: "ball")
-                    imageCell(title: "Closet", imageName: "closet")
-                }
-            }
-            .dynamicVerticalPadding()
-            .dynamicHorizontalPadding()
-            .background {
-                RoundedRectangle(cornerRadius: 16, style: .continuous)
-                    .fill(.thinMaterial)
-            }
-//            .sheet(isPresented: $presentingCodeScanner) {
-//                SetupCodeScanner { result in
-//
-//                    switch result {
-//                    case .success(let result):
-//                        print("r: \(result) -> \(result.string)")
-//                        presentingCodeScanner = false
-//                        properties.codeString = result.string
-//                    case .failure(let error):
-//                        print("Error scanning code: \(error)")
-//                        self.error = error
-//                    }
-//                }
-//            }
-//
-        }
-        .missionPropertiesInvalidReason(reason: properties.featurePrintData == nil ? "Take a photo first" : nil)
-        .dynamicHorizontalPadding()
-//        .errorAlert(error: $error)
-    }
-
-    @ViewBuilder func imageCell(title: String, imageName: String) -> some View {
-        VStack(spacing: 6) {
-            Color.clear
-                .overlay {
-                    Image(imageName, bundle: .module)
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                }
-                .mask {
-                    RoundedRectangle(cornerRadius: 10, style: .continuous)
-                }
-                .aspectRatio(1, contentMode: .fit)
-
-            Text(title)
-                .font(.callout)
-                .foregroundColor(.secondary)
-        }
     }
 }
 
