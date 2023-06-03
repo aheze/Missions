@@ -28,6 +28,10 @@ struct BlocksMissionPropertiesView: View {
 
     @AppStorage("importedWorlds") @Storage var importedWorlds = [String]()
 
+    var importedPresets: [WorldPreset] {
+        importedWorlds.compactMap { WorldParser.getPreset(string: $0) }
+    }
+
     let allowedCharacters = CharacterSet(charactersIn: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789")
 
     let columns = [
@@ -60,8 +64,25 @@ struct BlocksMissionPropertiesView: View {
             }
             .dynamicHorizontalPadding()
 
+            if !importedPresets.isEmpty {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Imported Worlds")
+                        .foregroundColor(.secondary)
+                        .font(.subheadline)
+                        .textCase(.uppercase)
+                        .dynamicHorizontalPadding()
+
+                    LazyVGrid(columns: columns, spacing: 16) {
+                        ForEach(importedPresets) { preset in
+                            BlocksMissionPresetView(properties: $properties, preset: preset)
+                        }
+                    }
+                    .dynamicHorizontalPadding()
+                }
+            }
+
             VStack(alignment: .leading, spacing: 8) {
-                Text("Selected World")
+                Text("... or select a preset")
                     .foregroundColor(.secondary)
                     .font(.subheadline)
                     .textCase(.uppercase)
@@ -89,6 +110,23 @@ struct BlocksMissionPropertiesView: View {
                 Text(errorString)
             }
         }
+        .onAppear {
+            let debugString = """
+            Ice Gold
+            3x3
+
+            ice ice ice
+            ice x ice
+            ice ice ice
+
+            gold gold gold
+            gold gold gold
+            gold gold gold
+            """
+            if !importedPresets.contains(where: { $0.name == "" }) {
+                importedWorlds.append(debugString)
+            }
+        }
     }
 
     func importFromCode(code: String) {
@@ -102,16 +140,12 @@ struct BlocksMissionPropertiesView: View {
             errorString = "Code must be alphanumeric (0-9, A-Z)."
             return
         }
-        
-        
+
         downloadWithCode(code: code) { string in
-            
         }
     }
-    
-    func downloadWithCode(code: String, completion: @escaping ((String?) -> Void)) {
-        
-    }
+
+    func downloadWithCode(code: String, completion: @escaping ((String?) -> Void)) {}
 }
 
 struct BlocksMissionPresetView: View {

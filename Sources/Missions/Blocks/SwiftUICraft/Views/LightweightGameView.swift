@@ -52,7 +52,7 @@ struct LightweightGameView: View {
             )
 
             /// Add a white base.
-            PrismColorView(tilt: tilt, size: size, extrusion: 20, levitation: -20, color: Color.white)
+            PrismColorView(tilt: tilt, size: size, extrusion: 6, levitation: -6, color: Color.white)
                 .overlay {
                     /// Enumerate over all blocks in the world and display them.
                     /// `model.level.world.blocks` must be sorted ascending for the 3D illusion to work.
