@@ -6,6 +6,7 @@
 //  Copyright © 2023 A. Zheng. All rights reserved.
 //
     
+import CoreML
 import SwiftUI
 import Vision
 
@@ -31,7 +32,12 @@ extension PhotoMissionPropertiesView {
                 }
                 
                 if let observation {
-                    properties.featurePrintData = observation.data
+                    do {
+                        let data = try NSKeyedArchiver.archivedData(withRootObject: observation, requiringSecureCoding: true)
+                        properties.featurePrintData = data
+                    } catch {
+                        print("Couldn't get feature print data encoded: \(error)")
+                    }
                 } else {
                     print("No feature print data.")
                 }
@@ -49,13 +55,30 @@ extension PhotoMissionPropertiesView {
 extension PhotoMissionView {
     func processImage(image: UIImage) {
         guard let cgImage = image.cgImage else { return }
+        guard let originalFeaturePrintData = properties.featurePrintData else { return }
         
         withAnimation {
             processingImage = true
         }
         
         DispatchQueue.global(qos: .userInitiated).async {
-            let observation = PhotoMissionProperties.featurePrintObservationForImage(cgImage: cgImage)
+            guard let observation = PhotoMissionProperties.featurePrintObservationForImage(cgImage: cgImage) else {
+                print("Couldn't get new observation.")
+                return
+            }
+            
+            do {
+                if let originalFeaturePrintObservation = try NSKeyedUnarchiver.unarchivedObject(ofClass: VNFeaturePrintObservation.self, from: originalFeaturePrintData) {
+                    var distance = Float(0)
+                    try originalFeaturePrintObservation.computeDistance(&distance, to: observation)
+                    
+                    print("Distance: \(distance)")
+                } else {
+                    print("None")
+                }
+            } catch {
+                print("Error decoding or computing distance: \(error)")
+            }
             
             DispatchQueue.main.async {
                 withAnimation {
