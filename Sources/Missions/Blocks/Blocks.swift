@@ -31,7 +31,7 @@ class BlocksMissionPropertiesModel: ObservableObject {
 
     func updatePresetsFromImportedWorlds(worlds: [String]) {
         let importedPresets = worlds.filter { !$0.isEmpty }.compactMap { WorldParser.getPreset(string: $0) }
-        print("From \(worlds.count) -> \(importedPresets.count)")
+//        print("From \(worlds.count) -> \(importedPresets.count)")
         self.importedPresets = importedPresets
     }
 
@@ -64,7 +64,7 @@ class BlocksMissionPropertiesModel: ObservableObject {
         }
     }
 
-    func checkServerAvailability(completion: @escaping ((Bool) -> Void)) {
+    func checkServerAvailability(completion: @escaping ((Bool, String?) -> Void)) {
         let baseURL = URL(string: "https://midnight-builds-api.vercel.app/api")!
         let finalURL = baseURL.appending(path: "active")
 
@@ -74,13 +74,24 @@ class BlocksMissionPropertiesModel: ObservableObject {
                 let data,
                 let string = String(data: data, encoding: .utf8)
             {
-                if string == "true" {
-                    completion(true)
+                if string.hasPrefix("true") {
+                    let components = string.components(separatedBy: ",")
+
+                    let serverID: String? = {
+                        if components.indices.contains(1) {
+                            let serverID = components[1]
+                            return serverID
+                        }
+                        return nil
+                    }()
+
+                    completion(true, serverID)
+
                     return
                 }
             }
 
-            completion(false)
+            completion(false, nil)
         }
 
         task.resume()
@@ -129,6 +140,7 @@ struct BlocksMissionPropertiesView: View {
     @State var confirmingDeleteAll = false
 
     @State var showingImportView = false
+    @State var serverID: String?
 
     let columns = [
         GridItem(.adaptive(minimum: 100, maximum: 200), spacing: 12, alignment: .top)
@@ -178,13 +190,15 @@ struct BlocksMissionPropertiesView: View {
             Text("You can't undo this action.")
         }
         .onAppear {
-            print("imported: \(model.importedWorlds)")
             model.updatePresetsFromImportedWorlds(worlds: model.importedWorlds)
 
-            model.checkServerAvailability { available in
+            model.checkServerAvailability { available, serverID in
                 DispatchQueue.main.async {
                     withAnimation {
                         showingImportView = available
+                        self.serverID = serverID
+
+                        print("serverID: \(serverID)")
                     }
                 }
             }
@@ -267,6 +281,20 @@ struct BlocksMissionPropertiesView: View {
                     }
                     .dynamicHorizontalPadding()
                 }
+            }
+
+            if let serverID {
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("Want to build your own world (and get a shareable code)? Join the Minecraft Java server at [\(serverID)](serverID)")
+                        .fixedSize(horizontal: false, vertical: true)
+
+                    Text("NOT AN OFFICIAL MINECRAFT PRODUCT. NOT APPROVED BY OR ASSOCIATED WITH MOJANG.\nMinecraft is copyright Mojang Studios and is not affiliated with this app. Get the game!")
+                        .foregroundColor(.secondary)
+                        .font(.caption)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .dynamicHorizontalPadding()
             }
         }
     }
