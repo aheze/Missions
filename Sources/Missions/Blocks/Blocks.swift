@@ -49,14 +49,15 @@ class BlocksMissionPropertiesModel: ObservableObject {
 
         downloadWithCode(code: code) { [weak self] string in
             guard let self else { return }
-            
+
             DispatchQueue.main.async {
                 if let string {
                     if self.importedWorlds.contains(where: { $0.getImportedWorldName() == string.getImportedWorldName() }) {
                         print("Already contains.")
+                        self.errorString = "You've already imported this world."
                         return
                     }
-                    
+
                     self.importedWorlds.append(string)
                 }
             }
@@ -64,14 +65,12 @@ class BlocksMissionPropertiesModel: ObservableObject {
     }
 
     func downloadWithCode(code: String, completion: @escaping ((String?) -> Void)) {
-//    https://midnight-builds-api.vercel.app/api/
-
         let baseURL = URL(string: "https://midnight-builds-api.vercel.app/api")!
         let finalURL = baseURL.appending(path: code)
 
-        print("finalURL: \(finalURL)")
+        let task = URLSession.shared.dataTask(with: finalURL) { [weak self] data, response, error in
+            guard let self else { return }
 
-        let task = URLSession.shared.dataTask(with: finalURL) { data, response, _ in
             if let httpResponse = response as? HTTPURLResponse {
                 print(httpResponse.statusCode)
 
@@ -79,16 +78,15 @@ class BlocksMissionPropertiesModel: ObservableObject {
                 case 200:
                     break
                 case 404:
-                    print("Code not found")
+                    self.errorString = "Code '\(code)' not found. Make sure you've copied it right."
                     return
                 default:
+                    self.errorString = "Server error."
                     return
                 }
             }
 
             if let data {
-                print("got data!")
-
                 if let string = String(data: data, encoding: .utf8) {
                     completion(string)
                     return
@@ -154,24 +152,26 @@ struct BlocksMissionPropertiesView: View {
             Text("You can't undo this action.")
         }
         .onAppear {
-            model.importedWorlds = []
-            let debugString = """
-            Ice Gold
-            3x3
-
-            ice ice ice
-            ice x ice
-            ice ice ice
-
-            gold gold gold
-            gold gold gold
-            gold gold gold
-            """
-            if !model.importedPresets.contains(where: { $0.name == "Ice Gold" }) {
-                model.importedWorlds.append(debugString)
-                model.updatePresetsFromImportedWorlds(worlds: model.importedWorlds)
-            }
+            model.updatePresetsFromImportedWorlds(worlds: model.importedWorlds)
         }
+//            model.importedWorlds = []
+//            let debugString = """
+//            Ice Gold
+//            3x3
+//
+//            ice ice ice
+//            ice x ice
+//            ice ice ice
+//
+//            gold gold gold
+//            gold gold gold
+//            gold gold gold
+//            """
+//            if !model.importedPresets.contains(where: { $0.name == "Ice Gold" }) {
+//                model.importedWorlds.append(debugString)
+//                model.updatePresetsFromImportedWorlds(worlds: model.importedWorlds)
+//            }
+//        }
         .onChange(of: model.importedWorlds) { newValue in
             model.updatePresetsFromImportedWorlds(worlds: newValue)
         }
