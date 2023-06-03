@@ -34,6 +34,7 @@ public struct MissionsView: View {
                 Text("All missions are free and open source on [GitHub](https://github.com/aheze/Missions).")
                     .foregroundColor(.secondary)
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
             .dynamicVerticalPadding()
             .dynamicHorizontalPadding()
             .background(.regularMaterial)
