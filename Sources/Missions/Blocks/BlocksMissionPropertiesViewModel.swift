@@ -20,6 +20,8 @@ class BlocksMissionPropertiesModel: ObservableObject {
     @Published var code = ""
 
     @Published var errorString: String?
+    
+    @Published var importing = false
 
     func updatePresetsFromImportedWorlds(worlds: [String]) {
         let importedPresets = worlds.filter { !$0.isEmpty }.compactMap { WorldParser.getPreset(string: $0) }
@@ -38,6 +40,10 @@ class BlocksMissionPropertiesModel: ObservableObject {
             return
         }
 
+        withAnimation {
+            importing = true
+        }
+        
         downloadWithCode(code: code) { [weak self] string in
             guard let self else { return }
 
@@ -49,7 +55,12 @@ class BlocksMissionPropertiesModel: ObservableObject {
                         return
                     }
 
+                    self.code = ""
                     self.importedWorlds.append(string)
+                }
+                
+                withAnimation {
+                    self.importing = false
                 }
             }
         }
