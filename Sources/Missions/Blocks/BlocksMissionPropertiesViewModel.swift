@@ -1,14 +1,12 @@
 //
 //  BlocksMissionPropertiesModel.swift
-//  
+//
 //
 //  Created by A. Zheng (github.com/aheze) on 6/2/23.
 //  Copyright © 2023 A. Zheng. All rights reserved.
 //
-    
 
 import SwiftUI
-
 
 // MARK: - Mission properties view
 
@@ -20,7 +18,7 @@ class BlocksMissionPropertiesModel: ObservableObject {
     @Published var code = ""
 
     @Published var errorString: String?
-    
+
     @Published var importing = false
 
     func updatePresetsFromImportedWorlds(worlds: [String]) {
@@ -43,11 +41,15 @@ class BlocksMissionPropertiesModel: ObservableObject {
         withAnimation {
             importing = true
         }
-        
+
         downloadWithCode(code: code) { [weak self] string in
             guard let self else { return }
 
             DispatchQueue.main.async {
+                withAnimation {
+                    self.importing = false
+                }
+
                 if let string {
                     if self.importedWorlds.contains(where: { $0.getImportedWorldName() == string.getImportedWorldName() }) {
                         print("Already contains.")
@@ -57,10 +59,6 @@ class BlocksMissionPropertiesModel: ObservableObject {
 
                     self.code = ""
                     self.importedWorlds.append(string)
-                }
-                
-                withAnimation {
-                    self.importing = false
                 }
             }
         }
