@@ -14,7 +14,9 @@ public struct MissionPropertiesView: View {
     var isEditingExistingMission: Bool
     var goToMissionPreview: (Mission) -> Void
     var missionFinishedEditing: (Mission) -> Void
+
     @State var propertiesModified = false
+    @State var missionPropertiesInvalidReason: String?
 
     public init(
         editingMission: Mission,
@@ -47,30 +49,42 @@ public struct MissionPropertiesView: View {
                 .offset(y: -10)
                 .dynamicHorizontalPadding()
 
-//                propertiesView()
                 Mission.propertiesView(mission: $editingMission)
-//                switch editingMission.content {
-//                case .shake(let properties):
-//                    let binding: Binding<ShakeMissionProperties> = Binding {
-//                        properties
-//                    } set: { newValue in
-//                        self.editingMission = .init(id: editingMission.id, content: .shake(properties: newValue))
-//                    }
-//                    ShakeMissionPropertiesView(properties: binding)
-//                case .blocks(let properties):
-//                    let binding: Binding<BlocksMissionProperties> = Binding {
-//                        properties
-//                    } set: { newValue in
-//                        self.editingMission = .init(id: editingMission.id, content: .blocks(properties: newValue))
-//                    }
-//
-//                    BlocksMissionPropertiesView(properties: binding)
-//                }
             }
             .padding(.top, 8)
             .padding(.bottom, 20)
         }
+        .onPreferenceChange(MissionsPropertiesInvalidReasonKey.self) { reason in
+            missionPropertiesInvalidReason = reason
+        }
         .safeAreaInset(edge: .bottom) {
+            bottomToolbar
+                .padding(.vertical, 10)
+                .dynamicHorizontalPadding()
+                .frame(maxWidth: .infinity)
+                .background {
+                    VariableBlurView(gradientMask: UIImage(named: "Gradient-Reversed")!)
+                        .ignoresSafeArea()
+                }
+        }
+        .background(Color(uiColor: .systemGroupedBackground))
+        .navigationTitle(type.metadata.title)
+        .navigationBarTitleDisplayMode(.large)
+        .onChange(of: editingMission.content) { newValue in
+            propertiesModified = true
+        }
+    }
+
+    @ViewBuilder var bottomToolbar: some View {
+        VStack(spacing: 10) {
+            if let missionPropertiesInvalidReason {
+                Text(missionPropertiesInvalidReason)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(.secondary)
+                    .dynamicHorizontalPadding()
+            }
+
             HStack {
                 Button {
                     goToMissionPreview(editingMission)
@@ -96,6 +110,8 @@ public struct MissionPropertiesView: View {
                         }
                 }
             }
+            .opacity(missionPropertiesInvalidReason == nil ? 1 : 0.75)
+            .disabled(missionPropertiesInvalidReason != nil)
             .fontWeight(.semibold)
             .padding(.vertical, 20)
             .dynamicHorizontalPadding()
@@ -104,38 +120,9 @@ public struct MissionPropertiesView: View {
                     .fill(Color.accentColor)
                     .opacity(0.1)
             }
-            .padding(.vertical, 10)
-            .dynamicHorizontalPadding()
-            .frame(maxWidth: .infinity)
-            .background {
-                VariableBlurView(gradientMask: UIImage(named: "Gradient-Reversed")!)
-                    .ignoresSafeArea()
-            }
-        }
-        .background(Color(uiColor: .systemGroupedBackground))
-        .navigationTitle(type.metadata.title)
-        .navigationBarTitleDisplayMode(.large)
-        .onChange(of: editingMission.content) { newValue in
-            propertiesModified = true
         }
     }
 }
-
-//extension MissionPropertiesView {
-//    @ViewBuilder func propertiesView() -> some View {
-//        switch editingMission.content {
-//        case .shake(let properties):
-//            let binding = Mission.propertiesBinding(getContent: { .shake(properties: $0) }, mission: $editingMission, properties: properties)
-//            ShakeMissionPropertiesView(properties: binding)
-//        case .blocks(let properties):
-//            let binding = Mission.propertiesBinding(getContent: { .blocks(properties: $0) }, mission: $editingMission, properties: properties)
-//            BlocksMissionPropertiesView(properties: binding)
-////        case .<#yourMissionName#>(let properties):
-////            let binding = Mission.propertiesBinding(getContent: { .<#yourMissionName#>(properties: $0) }, mission: mission, properties: properties)
-////            <#YourMissionName#>MissionPropertiesView(properties: binding)
-//        }
-//    }
-//}
 
 struct MissionPropertiesViewPreview: View {
     @State var initialMission = Mission(content: .shake())

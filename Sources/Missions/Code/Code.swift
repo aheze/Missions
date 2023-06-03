@@ -46,6 +46,7 @@ struct CodeMissionPropertiesView: View {
             }
             .dynamicHorizontalPadding()
         }
+        .missionPropertiesInvalidReason(reason: properties.codeString == nil ? "Select a code above first" : nil)
         .sheet(isPresented: $presentingCodeScanner) {
             SetupCodeScanner { result in
 
