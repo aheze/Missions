@@ -70,28 +70,30 @@ class BlocksMissionPropertiesModel: ObservableObject {
 
         let task = URLSession.shared.dataTask(with: finalURL) { data, response, error in
 
-            if
-                let data,
-                let string = String(data: data, encoding: .utf8)
-            {
-                if string.hasPrefix("true") {
-                    let components = string.components(separatedBy: ",")
-
-                    let serverID: String? = {
-                        if components.indices.contains(1) {
-                            let serverID = components[1]
-                            return serverID
-                        }
-                        return nil
-                    }()
-
-                    completion(true, serverID)
-
-                    return
+            DispatchQueue.main.async {
+                if
+                    let data,
+                    let string = String(data: data, encoding: .utf8)
+                {
+                    if string.hasPrefix("true") {
+                        let components = string.components(separatedBy: ",")
+                        
+                        let serverID: String? = {
+                            if components.indices.contains(1) {
+                                let serverID = components[1]
+                                return serverID
+                            }
+                            return nil
+                        }()
+                        
+                        completion(true, serverID)
+                        
+                        return
+                    }
                 }
+                
+                completion(false, nil)
             }
-
-            completion(false, nil)
         }
 
         task.resume()
@@ -104,29 +106,31 @@ class BlocksMissionPropertiesModel: ObservableObject {
         let task = URLSession.shared.dataTask(with: finalURL) { [weak self] data, response, error in
             guard let self else { return }
 
-            if let httpResponse = response as? HTTPURLResponse {
-                print(httpResponse.statusCode)
+            DispatchQueue.main.async {
+                if let httpResponse = response as? HTTPURLResponse {
+                    print(httpResponse.statusCode)
 
-                switch httpResponse.statusCode {
-                case 200:
-                    break
-                case 404:
-                    self.errorString = "Code '\(code)' not found. Make sure you've copied it right."
-                    return
-                default:
-                    self.errorString = "Server error."
-                    return
+                    switch httpResponse.statusCode {
+                    case 200:
+                        break
+                    case 404:
+                        self.errorString = "Code '\(code)' not found. Make sure you've copied it right."
+                        return
+                    default:
+                        self.errorString = "Server error."
+                        return
+                    }
                 }
-            }
 
-            if let data {
-                if let string = String(data: data, encoding: .utf8) {
-                    completion(string)
-                    return
+                if let data {
+                    if let string = String(data: data, encoding: .utf8) {
+                        completion(string)
+                        return
+                    }
                 }
-            }
 
-            completion(nil)
+                completion(nil)
+            }
         }
 
         task.resume()
