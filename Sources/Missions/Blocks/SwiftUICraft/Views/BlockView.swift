@@ -105,7 +105,7 @@ struct BlockView: View {
                     .overlay {
                         Rectangle()
                             .strokeBorder(
-                                Color.white,
+                                Color.primary,
                                 style: .init(
                                     lineWidth: 1,
                                     lineCap: .square,

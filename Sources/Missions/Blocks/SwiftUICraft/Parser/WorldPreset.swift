@@ -15,6 +15,7 @@ struct WorldPreset: Identifiable {
 
     var name: String
     var world: World
+    var presetString: String?
 
     static var allPresets: [WorldPreset] = {
         let strings = WorldParser.getPresetStrings()
@@ -34,7 +35,7 @@ extension WorldParser {
 
             let world = process(string: worldString)
 
-            return WorldPreset(name: name, world: world)
+            return WorldPreset(name: name, world: world, presetString: string)
         }
 
         return nil

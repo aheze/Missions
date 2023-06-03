@@ -68,17 +68,21 @@ struct BlocksMissionView: View {
             initialized = true
 
             let world: World = {
-                if
-                    let name = properties.selectedPresetName,
-                    let preset = WorldPreset.allPresets.first(where: { $0.name == name })
-                {
-                    return preset.world
-
-                } else {
-                    let random = WorldPreset.allPresets.randomElement() ?? WorldPreset(name: "Status", world: WorldParser.process(string: WorldParser.statue))
-
-                    return random.world
+                if let name = properties.selectedPresetName {
+                    if
+                        let presetString = properties.selectedPresetString,
+                        let preset = WorldParser.getPreset(string: presetString)
+                    {
+                        return preset.world
+                    } else if let preset = WorldPreset.allPresets.first(where: { $0.name == name }) {
+                        return preset.world
+                    }
                 }
+                
+                /// fallback to random
+                let random = WorldPreset.allPresets.randomElement() ?? WorldPreset(name: "Status", world: WorldParser.process(string: WorldParser.statue))
+                return random.world
+
             }()
 
             var items = world.getContainingBlockKinds().compactMap { $0.associatedItem }
@@ -99,7 +103,7 @@ struct BlocksMissionView: View {
                 items: items,
                 background: []
             )
-            
+
             model.setBlocks(blocks: model.level.world.blocks)
             overlayModel.setBlocks(blocks: overlayModel.level.world.blocks)
 
