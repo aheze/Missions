@@ -65,64 +65,9 @@ struct BlocksMissionPropertiesView: View {
     ]
 
     var body: some View {
-        VStack(spacing: 24) {
-            let binding = Binding {
-                model.code
-            } set: { newValue in
-                guard newValue.count <= 6 else { return }
-
-                let characterSet = CharacterSet(charactersIn: newValue)
-                if model.allowedCharacters.isSuperset(of: characterSet) {
-                    model.code = newValue.uppercased()
-                }
-            }
-
-            MissionPropertiesGroupView(header: "Import from Code", footer: "6-digit alphanumeric code") {
-                TextField("Enter Code", text: binding)
-                    .onSubmit {
-                        print("code: \(model.code)")
-
-                        model.importFromCode(code: model.code)
-                    }
-                    .textFieldStyle(.plain)
-                    .dynamicVerticalPadding()
-                    .dynamicHorizontalPadding()
-            }
-            .dynamicHorizontalPadding()
-
-            if !model.importedPresets.isEmpty {
-                VStack(alignment: .leading, spacing: 16) {
-                    HStack {
-                        Text("Imported Worlds")
-                            .textCase(.uppercase)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-
-                        Button("Delete All", role: .destructive) {
-                            confirmingDeleteAll = true
-                        }
-                    }
-                    .foregroundColor(.secondary)
-                    .font(.subheadline)
-                    .dynamicHorizontalPadding()
-
-                    LazyVGrid(columns: columns, spacing: 16) {
-                        ForEach(model.importedPresets) { preset in
-
-                            let binding: Binding<[String]> = Binding {
-                                model.importedWorlds
-                            } set: { newValue in
-                                model.importedWorlds = newValue
-                            }
-
-                            BlocksMissionImportedPresetView(importedWorlds: binding, properties: $properties, preset: preset)
-                        }
-                    }
-                    .dynamicHorizontalPadding()
-                }
-            }
-
+        VStack(spacing: 48) {
             VStack(alignment: .leading, spacing: 8) {
-                Text("... or select a preset")
+                Text("Select a world")
                     .foregroundColor(.secondary)
                     .font(.subheadline)
                     .textCase(.uppercase)
@@ -137,6 +82,8 @@ struct BlocksMissionPropertiesView: View {
                 }
                 .dynamicHorizontalPadding()
             }
+
+            importFromCodeView
         }
         .frame(maxWidth: .infinity)
         .alert("Error Importing", isPresented: Binding {
@@ -179,6 +126,65 @@ struct BlocksMissionPropertiesView: View {
         }
         .onChange(of: model.importedWorlds) { newValue in
             model.updatePresetsFromImportedWorlds(worlds: newValue)
+        }
+    }
+
+    @ViewBuilder var importFromCodeView: some View {
+        let binding = Binding {
+            model.code
+        } set: { newValue in
+            guard newValue.count <= 6 else { return }
+
+            let characterSet = CharacterSet(charactersIn: newValue)
+            if model.allowedCharacters.isSuperset(of: characterSet) {
+                model.code = newValue.uppercased()
+            }
+        }
+
+        VStack(spacing: 24) {
+            MissionPropertiesGroupView(header: "Or import from code", footer: "6-digit alphanumeric code") {
+                TextField("Enter Code", text: binding)
+                    .onSubmit {
+                        print("Entered code: \(model.code)")
+
+                        model.importFromCode(code: model.code)
+                    }
+                    .textFieldStyle(.plain)
+                    .dynamicVerticalPadding()
+                    .dynamicHorizontalPadding()
+            }
+            .dynamicHorizontalPadding()
+
+            if !model.importedPresets.isEmpty {
+                VStack(alignment: .leading, spacing: 16) {
+                    HStack {
+                        Text("Imported Worlds")
+                            .textCase(.uppercase)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+
+                        Button("Delete All", role: .destructive) {
+                            confirmingDeleteAll = true
+                        }
+                    }
+                    .foregroundColor(.secondary)
+                    .font(.subheadline)
+                    .dynamicHorizontalPadding()
+
+                    LazyVGrid(columns: columns, spacing: 16) {
+                        ForEach(model.importedPresets) { preset in
+
+                            let binding: Binding<[String]> = Binding {
+                                model.importedWorlds
+                            } set: { newValue in
+                                model.importedWorlds = newValue
+                            }
+
+                            BlocksMissionImportedPresetView(importedWorlds: binding, properties: $properties, preset: preset)
+                        }
+                    }
+                    .dynamicHorizontalPadding()
+                }
+            }
         }
     }
 }
