@@ -19,8 +19,12 @@ struct PhotoMissionView: View {
     @State var presentingCamera = false
     @State var image: UIImage?
 
+    @State var failedToGetDistance = false
+    @State var error: Error?
     @State var processingImage = false
-    
+    @State var previousAttemptImageDistance: Float?
+    var imageDistanceMaximumThreshold = Float(16)
+
     var body: some View {
         VStack(spacing: 20) {
             Text("Take a photo of this!")
@@ -37,7 +41,21 @@ struct PhotoMissionView: View {
                     }
             }
 
+            if let previousAttemptImageDistance {
+                let points = String(format: "%.2f", previousAttemptImageDistance)
+                
+                VStack(spacing: 16) {
+                    Text("Photo doesn't match, try again!")
+                    
+                    Text("Difference score: \(points), aim for 15 or lower.")
+                }
+                .multilineTextAlignment(.center)
+                .foregroundColor(.secondary)
+                .dynamicHorizontalPadding()
+            }
+
             Button {
+                missionUserInteractionOccurred?()
                 presentingCamera = true
             } label: {
                 Text("Take Photo")
@@ -51,6 +69,14 @@ struct PhotoMissionView: View {
                             .fill(Color.accentColor)
                             .opacity(0.1)
                     }
+            }
+
+            if failedToGetDistance {
+                Text("Error computing image similarity, please report a bug.")
+
+                Button("Finish Mission") {
+                    missionCompletion?()
+                }
             }
 
             Spacer()
@@ -70,6 +96,7 @@ struct PhotoMissionView: View {
                 self.image = image
             }
         }
+        .errorAlert(error: $error)
     }
 }
 

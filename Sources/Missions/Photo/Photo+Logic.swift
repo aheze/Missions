@@ -67,21 +67,40 @@ extension PhotoMissionView {
                 return
             }
             
-            do {
-                if let originalFeaturePrintObservation = try NSKeyedUnarchiver.unarchivedObject(ofClass: VNFeaturePrintObservation.self, from: originalFeaturePrintData) {
-                    var distance = Float(0)
-                    try originalFeaturePrintObservation.computeDistance(&distance, to: observation)
+            let distance: Float? = {
+                var distance = Float(0)
+            
+                do {
+                    if let originalFeaturePrintObservation = try NSKeyedUnarchiver.unarchivedObject(ofClass: VNFeaturePrintObservation.self, from: originalFeaturePrintData) {
+                        try originalFeaturePrintObservation.computeDistance(&distance, to: observation)
                     
-                    print("Distance: \(distance)")
-                } else {
-                    print("None")
+                        print("Distance: \(distance)")
+                        return distance
+                    } else {
+                        print("None")
+                    }
+                } catch {
+                    print("Error decoding or computing distance: \(error)")
+                    DispatchQueue.main.async {
+                        self.error = error
+                    }
                 }
-            } catch {
-                print("Error decoding or computing distance: \(error)")
-            }
+                return nil
+            }()
             
             DispatchQueue.main.async {
                 withAnimation {
+                    if let distance {
+                        if distance < imageDistanceMaximumThreshold {
+                            missionCompletion?()
+                        } else {
+                            previousAttemptImageDistance = distance
+                        }
+                    } else {
+                        print("Failed to get distance.")
+                        failedToGetDistance = true
+                    }
+                
                     processingImage = false
                 }
             }
