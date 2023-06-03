@@ -41,6 +41,7 @@ struct PhotoMissionPropertiesView: View {
                     Text("Tap to take a photo")
                         .font(.title3)
                 }
+                .foregroundColor(.accentColor)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 32)
                 .padding(.vertical, 48)
@@ -57,19 +58,21 @@ struct PhotoMissionPropertiesView: View {
             }
             .buttonStyle(.plain)
 
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Snap your first activity of the day.")
-                    .font(.headline)
-                
-                Text("Examples:")
-                
+            VStack(spacing: 12) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Snap your first activity of the day.")
+                        .font(.headline)
+
+                    Text("Examples:")
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+
                 HStack(spacing: 8) {
                     imageCell(title: "Sink", imageName: "sink")
                     imageCell(title: "Yoga Ball", imageName: "ball")
                     imageCell(title: "Closet", imageName: "closet")
                 }
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
             .dynamicVerticalPadding()
             .dynamicHorizontalPadding()
             .background {
@@ -96,7 +99,7 @@ struct PhotoMissionPropertiesView: View {
         .dynamicHorizontalPadding()
 //        .errorAlert(error: $error)
     }
-    
+
     @ViewBuilder func imageCell(title: String, imageName: String) -> some View {
         VStack(spacing: 6) {
             Color.clear
@@ -109,7 +112,7 @@ struct PhotoMissionPropertiesView: View {
                     RoundedRectangle(cornerRadius: 10, style: .continuous)
                 }
                 .aspectRatio(1, contentMode: .fit)
-         
+
             Text(title)
                 .font(.callout)
                 .foregroundColor(.secondary)

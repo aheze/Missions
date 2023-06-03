@@ -40,7 +40,7 @@ struct LocalizedAlertError: LocalizedError {
 
 public extension View {
     func dynamicHorizontalPadding() -> some View {
-        padding(.horizontal, 16)
+        padding(.horizontal, 20)
     }
 
     func dynamicVerticalPadding() -> some View {
