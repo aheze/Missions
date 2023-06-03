@@ -115,6 +115,17 @@ struct BlocksMissionOverlayView: View {
                 Spacer()
             }
         }
+        .overlay(alignment: .bottomLeading) {
+            if #available(iOS 16.4, *) {
+                menu
+                    .menuActionDismissBehavior(.disabled)
+                    .padding(16)
+            } else {
+                menu
+                    .padding(16)
+            }
+            
+        }
         .background {
             let scale = (length / baseLength) / 2.5
             let cappedScale = min(0.9, scale)
@@ -123,6 +134,55 @@ struct BlocksMissionOverlayView: View {
 
             if overlayExpanded {
                 GameView(model: model, scale: cappedScale, offset: CGSize(width: 0, height: offsetHeight), allowsBlockManipulation: false)
+            }
+        }
+    }
+    
+    @ViewBuilder var menu: some View {
+        let levitation = model.level.world.getBlocksMaximumLevitation()
+        
+        
+        if let selectedLevitation = model.maxLevitationShown {
+            Menu {
+                ForEach(0...levitation, id: \.self) { index in
+                    let levitationIndex = levitation - index
+                    
+                    let image: String? = {
+                        if levitationIndex > selectedLevitation {
+                            return nil
+                        }
+                        
+                        if levitationIndex == selectedLevitation {
+                            return "checkmark.circle.fill"
+                        }
+                        
+                        return "circle"
+                    }()
+                    
+                    Button {
+                        model.maxLevitationShown = levitationIndex
+                    } label: {
+                        if let image {
+                            Label("Layer \(levitationIndex + 1)", systemImage: image)
+                        } else {
+                            Text("Layer \(levitationIndex + 1)")
+                        }
+                        
+                    }
+                }
+            } label: {
+                Image(systemName: "square.3.layers.3d")
+                    .foregroundColor(.secondary)
+                    .frame(width: 50, height: 50)
+                    .background {
+                        Circle()
+                            .fill(.ultraThinMaterial)
+                            .overlay {
+                                Circle()
+                                    .stroke(Color.secondary, lineWidth: 0.5)
+                                    .opacity(0.25)
+                            }
+                    }
             }
         }
     }
@@ -208,6 +268,9 @@ struct BlocksMissionOverlayViewPreview: View {
         }
         .padding(24)
         .padding(.bottom, 200)
+        .onAppear {
+            model.maxLevitationShown = model.level.world.getBlocksMaximumLevitation()
+        }
     }
 }
 

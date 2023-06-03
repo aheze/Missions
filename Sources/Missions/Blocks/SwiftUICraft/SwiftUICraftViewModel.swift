@@ -39,6 +39,9 @@ class SwiftUICraftViewModel: ObservableObject {
     /// Whether the home indicator and other overlays are shown or not.
     @Published var homeIndicatorShown = false
     
+    /// If nil, show all layers.
+    @Published var maxLevitationShown: Int?
+    
     // MARK: - Tilting
     
     /// Saves the drag gesture's translation.

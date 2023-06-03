@@ -104,6 +104,8 @@ struct BlocksMissionView: View {
                 background: []
             )
 
+            overlayModel.maxLevitationShown = maxLevitation
+            
             model.setBlocks(blocks: model.level.world.blocks)
             overlayModel.setBlocks(blocks: overlayModel.level.world.blocks)
 
