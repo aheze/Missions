@@ -58,9 +58,16 @@ struct PhotoMissionPropertiesView: View {
             .buttonStyle(.plain)
 
             VStack(alignment: .leading, spacing: 4) {
-                Text("Take a photo of a prominent object.")
-
+                Text("Snap your first activity of the day.")
+                    .font(.headline)
+                
                 Text("Examples:")
+                
+                HStack(spacing: 8) {
+                    imageCell(title: "Sink", imageName: "sink")
+                    imageCell(title: "Yoga Ball", imageName: "ball")
+                    imageCell(title: "Closet", imageName: "closet")
+                }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .dynamicVerticalPadding()
@@ -88,6 +95,25 @@ struct PhotoMissionPropertiesView: View {
         .missionPropertiesInvalidReason(reason: properties.featurePrintData == nil ? "Take a photo first" : nil)
         .dynamicHorizontalPadding()
 //        .errorAlert(error: $error)
+    }
+    
+    @ViewBuilder func imageCell(title: String, imageName: String) -> some View {
+        VStack(spacing: 6) {
+            Color.clear
+                .overlay {
+                    Image(imageName, bundle: .module)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                }
+                .mask {
+                    RoundedRectangle(cornerRadius: 10, style: .continuous)
+                }
+                .aspectRatio(1, contentMode: .fit)
+         
+            Text(title)
+                .font(.callout)
+                .foregroundColor(.secondary)
+        }
     }
 }
 
