@@ -20,19 +20,44 @@ public struct BlocksMissionProperties: Codable, Hashable {
 
 // MARK: - Mission properties view
 
+class BlocksMissionPropertiesModel: ObservableObject {
+    @AppStorage("importedWorlds") @Storage var importedWorlds = [String]()
+    @Published var importedPresets = [WorldPreset]()
+
+    let allowedCharacters = CharacterSet(charactersIn: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789")
+    @Published var code = ""
+
+    @Published var errorString: String?
+
+    func updatePresetsFromImportedWorlds(worlds: [String]) {
+        let importedPresets = worlds.compactMap { WorldParser.getPreset(string: $0) }
+        print("From \(worlds.count) -> \(importedPresets.count)")
+        self.importedPresets = importedPresets
+    }
+
+    func importFromCode(code: String) {
+        if code.count != 6 {
+            errorString = "Code must be 6 digits."
+            return
+        }
+
+        let characterSet = CharacterSet(charactersIn: code)
+        if !allowedCharacters.isSuperset(of: characterSet) {
+            errorString = "Code must be alphanumeric (0-9, A-Z)."
+            return
+        }
+
+        downloadWithCode(code: code) { string in
+        }
+    }
+
+    func downloadWithCode(code: String, completion: @escaping ((String?) -> Void)) {}
+}
+
 struct BlocksMissionPropertiesView: View {
     @Binding var properties: BlocksMissionProperties
 
-    @State var code = ""
-    @State var errorString: String?
-
-    @AppStorage("importedWorlds") @Storage var importedWorlds = [String]()
-
-    var importedPresets: [WorldPreset] {
-        importedWorlds.compactMap { WorldParser.getPreset(string: $0) }
-    }
-
-    let allowedCharacters = CharacterSet(charactersIn: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789")
+    @StateObject var model = BlocksMissionPropertiesModel()
 
     let columns = [
         GridItem(.adaptive(minimum: 100, maximum: 200), spacing: 12, alignment: .top)
@@ -41,22 +66,22 @@ struct BlocksMissionPropertiesView: View {
     var body: some View {
         VStack(spacing: 24) {
             let binding = Binding {
-                code
+                model.code
             } set: { newValue in
                 guard newValue.count <= 6 else { return }
 
                 let characterSet = CharacterSet(charactersIn: newValue)
-                if allowedCharacters.isSuperset(of: characterSet) {
-                    code = newValue.uppercased()
+                if model.allowedCharacters.isSuperset(of: characterSet) {
+                    model.code = newValue.uppercased()
                 }
             }
 
             MissionPropertiesGroupView(header: "Import from Code", footer: "6-digit alphanumeric code") {
                 TextField("Enter Code", text: binding)
                     .onSubmit {
-                        print("code: \(code)")
+                        print("code: \(model.code)")
 
-                        importFromCode(code: code)
+                        model.importFromCode(code: model.code)
                     }
                     .textFieldStyle(.plain)
                     .dynamicVerticalPadding()
@@ -64,8 +89,8 @@ struct BlocksMissionPropertiesView: View {
             }
             .dynamicHorizontalPadding()
 
-            if !importedPresets.isEmpty {
-                VStack(alignment: .leading, spacing: 8) {
+            if !model.importedPresets.isEmpty {
+                VStack(alignment: .leading, spacing: 16) {
                     Text("Imported Worlds")
                         .foregroundColor(.secondary)
                         .font(.subheadline)
@@ -73,8 +98,15 @@ struct BlocksMissionPropertiesView: View {
                         .dynamicHorizontalPadding()
 
                     LazyVGrid(columns: columns, spacing: 16) {
-                        ForEach(importedPresets) { preset in
-                            BlocksMissionPresetView(properties: $properties, preset: preset)
+                        ForEach(model.importedPresets) { preset in
+
+                            let binding: Binding<[String]> = Binding {
+                                model.importedWorlds
+                            } set: { newValue in
+                                model.importedWorlds = newValue
+                            }
+
+                            BlocksMissionImportedPresetView(importedWorlds: binding, properties: $properties, preset: preset)
                         }
                     }
                     .dynamicHorizontalPadding()
@@ -100,17 +132,18 @@ struct BlocksMissionPropertiesView: View {
         }
         .frame(maxWidth: .infinity)
         .alert("Error Importing", isPresented: Binding {
-            errorString != nil
+            model.errorString != nil
         } set: { _ in
-            errorString = nil
+            model.errorString = nil
         }) {
             Button("Ok") {}
         } message: {
-            if let errorString {
+            if let errorString = model.errorString {
                 Text(errorString)
             }
         }
         .onAppear {
+            model.importedWorlds = []
             let debugString = """
             Ice Gold
             3x3
@@ -123,29 +156,69 @@ struct BlocksMissionPropertiesView: View {
             gold gold gold
             gold gold gold
             """
-            if !importedPresets.contains(where: { $0.name == "" }) {
-                importedWorlds.append(debugString)
+            if !model.importedPresets.contains(where: { $0.name == "Ice Gold" }) {
+                model.importedWorlds.append(debugString)
+                model.updatePresetsFromImportedWorlds(worlds: model.importedWorlds)
             }
         }
-    }
-
-    func importFromCode(code: String) {
-        if code.count != 6 {
-            errorString = "Code must be 6 digits."
-            return
-        }
-
-        let characterSet = CharacterSet(charactersIn: code)
-        if !allowedCharacters.isSuperset(of: characterSet) {
-            errorString = "Code must be alphanumeric (0-9, A-Z)."
-            return
-        }
-
-        downloadWithCode(code: code) { string in
+        .onChange(of: model.importedWorlds) { newValue in
+            print("changed: \(newValue.count)")
+            model.updatePresetsFromImportedWorlds(worlds: newValue)
         }
     }
+}
 
-    func downloadWithCode(code: String, completion: @escaping ((String?) -> Void)) {}
+struct BlocksMissionImportedPresetView: View {
+    @Binding var importedWorlds: [String]
+    @Binding var properties: BlocksMissionProperties
+    var preset: WorldPreset?
+
+    @State var confirmingDeletion = false
+
+    var body: some View {
+        BlocksMissionPresetView(properties: $properties, preset: preset)
+            .dynamicOverlay(align: .topTrailing, to: .center) {
+                Button {
+                    confirmingDeletion = true
+                } label: {
+                    Image(systemName: "xmark")
+                        .foregroundColor(.primary)
+                        .font(.caption)
+                        .fontWeight(.semibold)
+                        .frame(width: 26, height: 26)
+                        .background {
+                            Circle()
+                                .fill(.ultraThickMaterial)
+                        }
+                        .overlay {
+                            Circle()
+                                .stroke(Color.primary, lineWidth: 0.25)
+                                .opacity(0.25)
+                        }
+                }
+            }
+            .alert("Delete \(preset?.name ?? "World")?", isPresented: $confirmingDeletion) {
+                Button("Delete", role: .destructive) {
+                    var importedWorlds = self.importedWorlds
+                    importedWorlds = importedWorlds.filter { world in
+                        let worldString = world.trimmingCharacters(in: .whitespacesAndNewlines)
+                        let components = worldString.components(separatedBy: "\n")
+
+                        if let title = components.first {
+                            return title != preset?.name
+                        }
+
+                        return true
+                    }
+
+                    print("new importedWorlds: \(importedWorlds.count) -> \(importedWorlds)")
+                    self.importedWorlds = importedWorlds
+                }
+
+            } message: {
+                Text("You can't undo this action.")
+            }
+    }
 }
 
 struct BlocksMissionPresetView: View {

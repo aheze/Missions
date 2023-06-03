@@ -26,6 +26,7 @@ struct WorldPreset: Identifiable {
 
 extension WorldParser {
     static func getPreset(string: String) -> WorldPreset? {
+        let string = string.trimmingCharacters(in: .whitespacesAndNewlines)
         let components = string.components(separatedBy: "\n")
 
         if let name = components.first {
