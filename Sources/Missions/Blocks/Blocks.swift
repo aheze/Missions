@@ -30,7 +30,7 @@ class BlocksMissionPropertiesModel: ObservableObject {
     @Published var errorString: String?
 
     func updatePresetsFromImportedWorlds(worlds: [String]) {
-        let importedPresets = worlds.compactMap { WorldParser.getPreset(string: $0) }
+        let importedPresets = worlds.filter { !$0.isEmpty }.compactMap { WorldParser.getPreset(string: $0) }
         print("From \(worlds.count) -> \(importedPresets.count)")
         self.importedPresets = importedPresets
     }
@@ -62,6 +62,28 @@ class BlocksMissionPropertiesModel: ObservableObject {
                 }
             }
         }
+    }
+
+    func checkServerAvailability(completion: @escaping ((Bool) -> Void)) {
+        let baseURL = URL(string: "https://midnight-builds-api.vercel.app/api")!
+        let finalURL = baseURL.appending(path: "active")
+
+        let task = URLSession.shared.dataTask(with: finalURL) { data, response, error in
+
+            if
+                let data,
+                let string = String(data: data, encoding: .utf8)
+            {
+                if string == "true" {
+                    completion(true)
+                    return
+                }
+            }
+
+            completion(false)
+        }
+
+        task.resume()
     }
 
     func downloadWithCode(code: String, completion: @escaping ((String?) -> Void)) {
@@ -106,6 +128,8 @@ struct BlocksMissionPropertiesView: View {
     @StateObject var model = BlocksMissionPropertiesModel()
     @State var confirmingDeleteAll = false
 
+    @State var showingImportView = false
+
     let columns = [
         GridItem(.adaptive(minimum: 100, maximum: 200), spacing: 12, alignment: .top)
     ]
@@ -129,7 +153,9 @@ struct BlocksMissionPropertiesView: View {
                 .dynamicHorizontalPadding()
             }
 
-            importFromCodeView
+            if showingImportView {
+                importFromCodeView
+            }
         }
         .frame(maxWidth: .infinity)
         .alert("Error Importing", isPresented: Binding {
@@ -152,7 +178,16 @@ struct BlocksMissionPropertiesView: View {
             Text("You can't undo this action.")
         }
         .onAppear {
+            print("imported: \(model.importedWorlds)")
             model.updatePresetsFromImportedWorlds(worlds: model.importedWorlds)
+
+            model.checkServerAvailability { available in
+                DispatchQueue.main.async {
+                    withAnimation {
+                        showingImportView = available
+                    }
+                }
+            }
         }
 //            model.importedWorlds = []
 //            let debugString = """
