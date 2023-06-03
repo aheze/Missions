@@ -17,6 +17,7 @@ public enum MissionType: Codable, CaseIterable {
     case shake
     case blocks
     case code
+    case photo
 //    case <#yourMissionName#>
 
     public var defaultMissionContent: Mission.Content {
@@ -27,6 +28,8 @@ public enum MissionType: Codable, CaseIterable {
             return .blocks()
         case .code:
             return .code()
+        case .photo:
+            return .photo()
 //        case .<#yourMissionName#>:
 //            return .<#yourMissionName#>()
         }
@@ -52,6 +55,12 @@ public enum MissionType: Codable, CaseIterable {
                 title: "Code Scan",
                 description: "Scan a QR code or barcode"
             )
+        case .photo:
+            return Metadata(
+                icon: "camera",
+                title: "Photo",
+                description: "Take a photo, then match it"
+            )
 //        case .<#yourMissionName#>:
 //            return Metadata(
 //                icon: "<#your.mission.icon#>",
@@ -67,6 +76,7 @@ public struct Mission: Codable, Identifiable, Hashable {
         case shake(properties: ShakeMissionProperties = .init())
         case blocks(properties: BlocksMissionProperties = .init())
         case code(properties: CodeMissionProperties = .init())
+        case photo(properties: PhotoMissionProperties = .init())
 //        case <#yourMissionName#>(properties: <#YourMissionName#>MissionProperties = .init())
 
         public var type: MissionType {
@@ -77,6 +87,8 @@ public struct Mission: Codable, Identifiable, Hashable {
                 return .blocks
             case .code:
                 return .code
+            case .photo:
+                return .photo
 //            case .<#yourMissionName#>:
 //                return .<#yourMissionName#>
             }
@@ -109,6 +121,14 @@ public struct Mission: Codable, Identifiable, Hashable {
             }
 
             CodeMissionPropertiesView(properties: binding)
+        case .photo(let properties):
+            let binding = Binding {
+                properties
+            } set: { newValue in
+                mission.updateContent(content: .photo(properties: newValue))
+            }
+
+            PhotoMissionPropertiesView(properties: binding)
 //        case .<#yourMissionName#>(let properties):
 //            let binding = Binding {
 //                properties
@@ -127,6 +147,8 @@ public struct Mission: Codable, Identifiable, Hashable {
             BlocksMissionView(properties: properties)
         case .code(let properties):
             CodeMissionView(properties: properties)
+        case .photo(let properties):
+            PhotoMissionView(properties: properties)
 //        case .<#yourMissionName#>(let properties):
 //            <#YourMissionName#>MissionView(properties: properties)
         }
