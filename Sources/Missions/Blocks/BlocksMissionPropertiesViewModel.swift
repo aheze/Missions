@@ -48,6 +48,7 @@ class BlocksMissionPropertiesModel: ObservableObject {
             DispatchQueue.main.async {
                 withAnimation {
                     self.importing = false
+                    self.objectWillChange.send()
                 }
 
                 if let string {

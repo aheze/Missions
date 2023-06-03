@@ -116,15 +116,16 @@ struct BlocksMissionOverlayView: View {
             }
         }
         .overlay(alignment: .bottomLeading) {
-            if #available(iOS 16.4, *) {
-                menu
-                    .menuActionDismissBehavior(.disabled)
-                    .padding(16)
-            } else {
-                menu
-                    .padding(16)
+            if overlayExpanded {
+                if #available(iOS 16.4, *) {
+                    menu
+                        .menuActionDismissBehavior(.disabled)
+                        .padding(16)
+                } else {
+                    menu
+                        .padding(16)
+                }
             }
-            
         }
         .background {
             let scale = (length / baseLength) / 2.5
