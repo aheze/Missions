@@ -1,6 +1,15 @@
 {
   "pins" : [
     {
+      "identity" : "codescanner",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/aheze/CodeScanner",
+      "state" : {
+        "branch" : "main",
+        "revision" : "4b2f9c57d03bfe94e6b45572e0c908c1433c32b2"
+      }
+    },
+    {
       "identity" : "prism",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/aheze/Prism",
