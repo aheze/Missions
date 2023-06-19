@@ -77,6 +77,7 @@ extension SwiftUICraftViewModel {
         DispatchQueue.main.async {
             self.level.world.blocks = blocks
             self.level.world.inverseBlocks = inverseBlocks
+            self.objectWillChange.send()
             completion?()
         }
     }
